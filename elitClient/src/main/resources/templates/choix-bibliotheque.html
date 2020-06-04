@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="../webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+    <title>eLitSite - Liste des ouvrages</title>
+    <meta charset="UTF-8"></head>
+<body>
+
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="container">
+
+    <h1>Choisissez votre biblioth&egrave;que</h1>
+
+    <div class="row" style="margin-top:50px;margin-bottom:10px;margin-left:5px;margin-right:5px">
+
+        <div th:if="${#lists.isEmpty(bibliotheques)}" class="alert alert-info">
+            <td colspan="4" align="center">Pas de choix disponible dans votre secteur, appelez le support au 3615 j'aime lire !</td>
+        </div>
+        <div th:each="bibliotheque : ${bibliotheques}" class="col-md-4 my-1">
+            <td><a th:href="@{|/mabibliotheque?bibliothequeId=${bibliotheque.bibliothequeId}|}" title="Choisir" data-toggle="tooltip" data-placement="top">
+                    <div th:text="${bibliotheque.bibliothequeNom}"></div>
+                </a>
+                <div th:text="${bibliotheque.bibliothequeAdresse}"></div>
+                <div th:text="${bibliotheque.bibliothequeHoraires}"></div>
+                <div th:text="${bibliotheque.bibliothequeTelephone}"></div>
+                <div th:text="${bibliotheque.bibliothequeEmail}"></div>
+            </td>
+        </div>
+    </div>
+
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

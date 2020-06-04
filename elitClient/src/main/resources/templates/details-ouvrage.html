@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Détails de l'ouvrage</title>
+
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="../webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+
+</head>
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="container">
+    <div class="row" style="margin-top:50px;margin-bottom:10px;margin-left:5px;margin-right:5px">
+        <div class="col-md-offset-1 col-md-11">
+            <a href="/ouvrages">Retour</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <h3>
+                            <b th:text="${ouvrage.getOuvrageTitre()}"></b>&nbsp;
+                            de
+                            <span th:text="${ouvrage.getOuvrageAuteur()}"></span>&nbsp;
+                        </h3>
+
+                    </h3>
+                </div>
+
+                <section class="table-responsive">
+                    <table class="table table-striped table-bordered table-responsive">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <img th:alt="${ouvrage.ouvrageTitre}" th:src="${ouvrage.ouvrageLienImage}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Référence</th>
+                            <td th:text="${ouvrage.getOuvrageReference()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Histoire</th>
+                            <td th:text="${ouvrage.getOuvrageResume()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Genre</th>
+                            <td th:text="${ouvrage.getOuvrageStyle()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Localisation</th>
+                            <td th:text="${ouvrage.getOuvrageLocalisation()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Quantité restante</th>
+                            <td th:text="${ouvrage.getOuvrageQuantite()}"></td>
+                        </tr>
+                        <tr>
+                            <th>Lieu de mise à disposition</th>
+                            <td th:text="${ouvrage.bibliotheque.bibliothequeNom}"
+                                th:title="${ouvrage.bibliotheque.infos()}">
+                            </td>
+                        </tr>
+
+                    </table>
+                </section>
+                <a href="/ouvrages">Retour</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+<!--<link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />-->
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+
+<div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/"><div id="logo50"></div></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" class="nav-link" href="/ouvrages">Les ouvrages</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" class="nav-link" href="/mesemprunts">Mes emprunts</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" class="nav-link" href="/adm1n">...</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAnonymous()" class="nav-link" href="/bibliotheques">Choisir une biblioth&egrave;que</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" class="nav-link" href="/bibliotheques">Changer de biblioth&egrave;que</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+                <li class="nav-item active">
+                    <span sec:authorize="isAuthenticated()" class="nav-link">Bienvenue <span sec:authentication="name">Utilisateur connect&eacute;</span></span>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAnonymous()" class="nav-link" href="/registration">S'inscrire</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAnonymous()" class="nav-link" href="/login">Se connecter</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="isAuthenticated()" class="nav-link" href="/logout">Se deconnecter</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

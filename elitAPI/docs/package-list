@@ -1,0 +1,7 @@
+fr.rbo.elitapi
+fr.rbo.elitapi.auth
+fr.rbo.elitapi.configuration
+fr.rbo.elitapi.controller
+fr.rbo.elitapi.entity
+fr.rbo.elitapi.exceptions
+fr.rbo.elitapi.repository

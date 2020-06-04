@@ -1,0 +1,45 @@
+.spacer40 {
+	margin-top:40px;
+}
+
+.red {
+	color:red;
+}
+
+.navbar {
+/*	position: relative; */
+	min-height: 50px;
+	margin-bottom: 0px;
+	border: 1px solid transparent;
+}
+
+#elitsite {
+	background-image: url("../images/biblio01.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100vh;
+	color: #000000;
+	position: center;
+}
+
+#pave-central{
+	margin-top: 15%;
+	color: #5c5c5c !important;
+	background-color: whitesmoke;
+	opacity: 0.75;
+}
+
+#logo50 {
+  background-image: url("../images/logo50.png");
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+}
+
+a.logo20 {
+	background-image: url("../images/logo20.png");
+	background-repeat: no-repeat;
+	background-position: center right;
+	padding-right: 20px;
+}

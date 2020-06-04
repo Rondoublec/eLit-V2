@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<title>eLitSite - Accueil</title>
+
+	<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+	<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+	<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="d-flex p-2 bd-highlight" style="margin-top:0px;" id="elitsite">
+	<div class="container">
+
+	<div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+	</div>
+
+	</div>
+
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>
