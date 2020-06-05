@@ -1,6 +1,7 @@
 package fr.rbo.elitapi.controller;
 
 import fr.rbo.elitapi.entity.Emprunt;
+import fr.rbo.elitapi.entity.EnCours;
 import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.entity.User;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
@@ -219,11 +220,44 @@ public class EmpruntController {
         return emprunts;
     }
 
+    /**
+     * renvoie la liste des emprunts en cours
+     * @param id de l'ouvrage
+     * @return liste des emprunts en retards pour un ouvrage
+     */
+    @GetMapping(value="/emprunts/encours/{id}")
+    public EnCours etatEmpruntEnCours(@PathVariable("id") long id) {
+        LOGGER.debug("Get /emprunt/encours/{id} " + id);
+        Ouvrage ouvrageRecherche = ouvrageRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Ouvrage inexistant"));
+        List<Emprunt> emprunts = empruntRepository.findAllByOuvrageAndEmpruntRenduFalse(ouvrageRecherche);
+        LOGGER.debug("emprunts " + emprunts.size());
+        if (emprunts.isEmpty()) throw new NotFoundException("Aucun emprunt en cours pour cet ouvrage");
+        EnCours enCours = infoEmpruntsEnCours(emprunts);
+        return enCours;
+    }
+
     private Date dateFinPeriode (Date dateDebut, int duree){
         GregorianCalendar dateFin = new GregorianCalendar();
         dateFin.setTime(dateDebut);
         dateFin.add(GregorianCalendar.DATE,duree);
         return dateFin.getTime();
+    }
+    private EnCours infoEmpruntsEnCours (List<Emprunt> emprunts){
+        EnCours enCours = new EnCours(emprunts.get(0).getOuvrage().getOuvrageId()
+                ,emprunts.size(),emprunts.get(0).getEmpruntDateFin());
+        for (Emprunt e : emprunts) {
+            if (e.getEmpruntDateProlongation() == null){
+                if (e.getEmpruntDateFin().before(enCours.getDateRetourPrevue())){
+                    enCours.setDateRetourPrevue(e.getEmpruntDateFin());
+                }
+            } else {
+                if (e.getEmpruntDateProlongation().before(enCours.getDateRetourPrevue())) {
+                    enCours.setDateRetourPrevue(e.getEmpruntDateProlongation());
+                }
+            }
+        }
+        return enCours;
     }
 
 }
