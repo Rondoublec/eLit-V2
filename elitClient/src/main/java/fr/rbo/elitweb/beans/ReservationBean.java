@@ -1,31 +1,14 @@
-package fr.rbo.elitapi.entity;
+package fr.rbo.elitweb.beans;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Entity
-public class Reservation {
-    private static final Logger log = LoggerFactory.getLogger(Reservation.class);
+public class ReservationBean {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long reservationId;
-    @ManyToOne
-    private Ouvrage ouvrage;
-    @ManyToOne
-    private User user;
+    private OuvrageBean ouvrage;
+    private UserBean user;
     private Date reservationDateDemande;
     private Date reservationDateNotif;
-    @NotNull
     private Boolean reservationActive;
 
     public long getReservationId() {
@@ -36,19 +19,19 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public Ouvrage getOuvrage() {
+    public OuvrageBean getOuvrage() {
         return ouvrage;
     }
 
-    public void setOuvrage(Ouvrage ouvrage) {
+    public void setOuvrage(OuvrageBean ouvrage) {
         this.ouvrage = ouvrage;
     }
 
-    public User getUser() {
+    public UserBean getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserBean user) {
         this.user = user;
     }
 

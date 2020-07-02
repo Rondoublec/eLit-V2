@@ -88,7 +88,16 @@
         </a>
         <div th:utext="${ouvrage.ouvrageTitre}"></div>
         <div th:utext="'Auteur ' + ${ouvrage.ouvrageAuteur}"></div>
-        <div th:utext="${ouvrage.ouvrageQuantite} + ' exemplaire(s)'"></div>
+        <div th:if="${ouvrage.ouvrageQuantite eq '0'}">Ouvrage indisponible
+            <div>
+            <a th:href="@{|/ouvrage/details?ouvrageId=${ouvrage.ouvrageId}|}" title="resa">
+                Voir s'il est réservable
+            </a>
+            </div>
+        </div>
+        <div th:if="${ouvrage.ouvrageQuantite ne '0'}">
+            <span th:utext="${ouvrage.ouvrageQuantite} + ' disponible(s)'"></span>
+        </div>
         <div th:utext="'&agrave; ' + ${ouvrage.bibliotheque.bibliothequeNom}"
              th:title="${ouvrage.bibliotheque.infos()}"></div>
     </div>

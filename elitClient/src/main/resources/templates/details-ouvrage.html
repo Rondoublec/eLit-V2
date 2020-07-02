@@ -55,15 +55,36 @@
                             <td th:text="${ouvrage.getOuvrageLocalisation()}"></td>
                         </tr>
                         <tr>
-                            <th>Quantité restante</th>
-                            <td th:text="${ouvrage.getOuvrageQuantite()}"></td>
-                        </tr>
-                        <tr>
                             <th>Lieu de mise à disposition</th>
                             <td th:text="${ouvrage.bibliotheque.bibliothequeNom}"
                                 th:title="${ouvrage.bibliotheque.infos()}">
                             </td>
                         </tr>
+                        <span th:if="${isdisponible} == true">
+                            <tr>
+                                <th>Quantité restante</th>
+                                <td th:text="${ouvrage.getOuvrageQuantite()}"></td>
+                            </tr>
+                        </span>
+                        <span th:if="${isdisponible} == false">
+                            <tr>
+                                <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
+                                    <span th:if="${isreservable} == true">
+                                        <div class="btn btn-outline-primary">
+                                            Réserver cet ouvrage
+                                        </div>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Disponible à partir du</th>
+                                <td th:text="${#dates.format(encours.getDateRetourPrevue(), 'dd-MM-yyyy')}"></td>
+                            </tr>
+                            <tr>
+                                <th>Réservation(s) en attente</th>
+                                <td th:text="${encours.getNbEncours()}"></td>
+                            </tr>
+                        </span>
 
                     </table>
                 </section>

@@ -1,7 +1,9 @@
 package fr.rbo.elitweb.controller;
 
 import fr.rbo.elitweb.beans.BibliothequeBean;
+import fr.rbo.elitweb.beans.EnCoursBean;
 import fr.rbo.elitweb.beans.OuvrageBean;
+import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.exceptions.NotFoundException;
 import fr.rbo.elitweb.proxies.APIProxy;
 import org.slf4j.Logger;
@@ -80,7 +82,39 @@ public class OuvragesController {
             return "redirect:/ouvrages";
         }
         model.addAttribute("ouvrage", ouvrage);
+
+        int nbResa = 0;
+        model.addAttribute("nbresa", nbResa);
+        model.addAttribute("isreservable", false);
+        model.addAttribute("isdisponible", true);
+
+        if (Integer.parseInt(ouvrage.getOuvrageQuantite()) == 0){
+            model.addAttribute("isdisponible", false);
+            EnCoursBean enCours = null;
+            try {
+                enCours = apiProxy.etatEmpruntEnCours(ouvrageId);
+            } catch (NotFoundException e) {}
+            model.addAttribute("encours", enCours);
+
+            List<ReservationBean> reservationBean;
+            try {
+                reservationBean = apiProxy.listeDesReservationsDeLOuvrage(ouvrageId);
+                nbResa = reservationBean.size();
+            } catch (NotFoundException e) {}
+            model.addAttribute("nbresa", nbResa);
+            model.addAttribute("isreservable", isReservable(enCours, nbResa));
+        }
+
         return "details-ouvrage";
+    }
+
+    protected Boolean isReservable(EnCoursBean enCours, int nbResa){
+        Boolean isReservable = false;
+        int maxResaPossible = 2 * enCours.getNbEncours();
+        if (maxResaPossible > nbResa){
+            isReservable = true;
+        }
+        return isReservable;
     }
 
     protected BibliothequeBean choixBibliotheque() {
