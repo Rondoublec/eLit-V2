@@ -59,13 +59,12 @@ public class EmpruntController {
      * @param httpSession Session
      * @return liste de emprunts de l'utilisateur connecté correspondants aux critères de recherche
      */
-    @RequestMapping(value="/mesemprunts/recherche", method = RequestMethod.POST)
-    public String EmpruntsRecherche (Model model,
-                                     @ModelAttribute("empruntCriteres") EmpruntBean empruntCriteres,
-                                     HttpSession httpSession) {
-        LOGGER.debug("Post /mesemprunts/recherche");
-        List<EmpruntBean> emprunts = null;
+    @RequestMapping(value="/mesemprunts", method = RequestMethod.POST)
+    public String EmpruntsRecherche (Model model, HttpSession httpSession,
+                                     @ModelAttribute("empruntCriteres") EmpruntBean empruntCriteres) {
+        LOGGER.debug("Post /mesemprunts");
         empruntCriteres.setUser(recupUser());
+        List<EmpruntBean> emprunts = null;
         try {
             emprunts = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
         } catch(NotFoundException e){}
@@ -119,7 +118,7 @@ public class EmpruntController {
             emprunt = apiProxy.findEmpruntById(empruntId);
         } catch(NotFoundException e){
             redirectAttributes.addFlashAttribute("status","notFound");
-            model.addAttribute("plus", "notFound");
+            model.addAttribute("status", "notFound");
             return "redirect:/mesemprunts";
         }
         if (!emprunt.getUser().getEmail().equals(recupUser().getEmail())){

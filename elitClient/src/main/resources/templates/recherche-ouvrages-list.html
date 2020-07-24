@@ -26,13 +26,13 @@
         </div>
         <div th:if="${status eq 'notFound'}">
             <div class="alert alert-warning alert-dismissible" role="alert">
-                <strong>Echec !</strong> - D&eacute;tails non disponibles ou identifiant d'ouvragee inexistant.
+                <strong>Echec !</strong> - D&eacute;tails non disponibles ou identifiant d'ouvrage inexistant.
             </div>
         </div>
     </div>
     <h3 class="panel-title" th:utext="${titre}"></h3>
     <div class="col-md-12">
-        <form data-toggle="validator" role="form" th:object="${ouvrageCriteres}" th:action="@{/ouvrages/recherche}"
+        <form data-toggle="validator" role="form" th:object="${ouvrageCriteres}" th:action="@{/ouvrages}"
               method="post">
             <table class="table table-striped">
                 <thead>

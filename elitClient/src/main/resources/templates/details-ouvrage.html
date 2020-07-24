@@ -67,25 +67,43 @@
                             </tr>
                         </span>
                         <span th:if="${isdisponible} == false">
-                            <tr>
-                                <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
-                                    <span th:if="${isreservable} == true">
-                                        <div class="btn btn-outline-primary">
-                                            Réserver cet ouvrage
-                                        </div>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Disponible à partir du</th>
-                                <td th:text="${#dates.format(encours.getDateRetourPrevue(), 'dd-MM-yyyy')}"></td>
-                            </tr>
-                            <tr>
-                                <th>Réservation(s) en attente</th>
-                                <td th:text="${encours.getNbEncours()}"></td>
-                            </tr>
+                            <span th:if="${encours.getNbEncours()} > 0">
+                                <tr>
+                                    <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
+                                        <span th:if="${isreservable} == true">
+                                            <div class="btn btn-outline-primary">
+                                                Réserver cet ouvrage
+                                            </div>
+                                        </span>
+                                        <span th:if="${isreservable} == false">
+                                                Non réservable, quota de la liste d'attente dépassé
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>1er retour à partir du</th>
+                                    <td th:text="${#dates.format(encours.getDateRetourPrevue(), 'dd-MM-yyyy')}"></td>
+                                </tr>
+                                <tr>
+                                    <th>Réservation(s) en attente</th>
+                                    <td th:text="${encours.getNbEncours()}"></td>
+                                </tr>
+                            </span>
+                            <span th:if="${encours.getNbEncours()} == 0">
+                                <tr>
+                                    <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
+                                        <span th:if="${isreservable} == true">
+                                            <div class="btn btn-outline-primary">
+                                                Réserver cet ouvrage
+                                            </div>
+                                        </span>
+                                        <span th:if="${isreservable} == false">
+                                                Non réservable, rupture définitive
+                                        </span>
+                                    </td>
+                                </tr>
+                            </span>
                         </span>
-
                     </table>
                 </section>
                 <a href="/ouvrages">Retour</a>

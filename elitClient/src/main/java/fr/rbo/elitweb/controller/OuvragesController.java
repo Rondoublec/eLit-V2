@@ -49,20 +49,19 @@ public class OuvragesController {
         return "recherche-ouvrages-list";
     }
 
-    @RequestMapping(value = "/ouvrages/recherche", method = RequestMethod.POST)
+    @RequestMapping(value = "/ouvrages", method = RequestMethod.POST)
     public String OuvragesRecherche(Model model,
                                     @ModelAttribute("ouvrageCriteres") OuvrageBean ouvrageCriteres,
                                     HttpSession httpSession) {
-        LOGGER.debug("Post /ouvrages/recherche");
+        LOGGER.debug("Post /ouvrages");
         ouvrageCriteres.setBibliotheque(choixBibliotheque());
         try {
             if (ouvrageCriteres.getBibliotheque().getBibliothequeId().toString().isEmpty()) { return "redirect:/bibliotheques"; }}
         catch (Exception e) { return "redirect:/bibliotheques"; }
         List<OuvrageBean> ouvrages = null;
         try {
-            ouvrages = apiProxy.rechercheOuvrage(ouvrageCriteres);
-        } catch (NotFoundException e) {
-        }
+            ouvrages = apiProxy.rechercheOuvrage(ouvrageCriteres); }
+        catch (NotFoundException e) {}
         model.addAttribute("titre", "Résultats de la recherche");
         model.addAttribute("ouvrageCriteres", ouvrageCriteres);
         model.addAttribute("ouvrages", ouvrages);
@@ -83,29 +82,38 @@ public class OuvragesController {
         }
         model.addAttribute("ouvrage", ouvrage);
 
-        int nbResa = 0;
-        model.addAttribute("nbresa", nbResa);
-        model.addAttribute("isreservable", false);
-        model.addAttribute("isdisponible", true);
-
         if (Integer.parseInt(ouvrage.getOuvrageQuantite()) == 0){
             model.addAttribute("isdisponible", false);
-            EnCoursBean enCours = null;
-            try {
-                enCours = apiProxy.etatEmpruntEnCours(ouvrageId);
-            } catch (NotFoundException e) {}
+            EnCoursBean enCours = recupInfosEnCours(ouvrageId);
             model.addAttribute("encours", enCours);
-
-            List<ReservationBean> reservationBean;
-            try {
-                reservationBean = apiProxy.listeDesReservationsDeLOuvrage(ouvrageId);
-                nbResa = reservationBean.size();
-            } catch (NotFoundException e) {}
+            int nbResa = recupNbResa(ouvrageId);
             model.addAttribute("nbresa", nbResa);
             model.addAttribute("isreservable", isReservable(enCours, nbResa));
+        } else {
+            model.addAttribute("isdisponible", true);
+            model.addAttribute("isreservable", false);
+            model.addAttribute("nbresa", 0);
         }
 
         return "details-ouvrage";
+    }
+
+    protected EnCoursBean recupInfosEnCours (int ouvrageId) {
+        EnCoursBean enCours = null;
+        try {
+            enCours = apiProxy.etatEmpruntEnCours(ouvrageId);
+        } catch (NotFoundException e) {}
+        return enCours;
+    }
+
+    protected Integer recupNbResa (int ouvrageId) {
+        int nbResa = 0;
+        List<ReservationBean> reservationBean;
+        try {
+            reservationBean = apiProxy.listeDesReservationsDeLOuvrage(ouvrageId);
+            nbResa = reservationBean.size();
+        } catch (NotFoundException e) {}
+        return nbResa;
     }
 
     protected Boolean isReservable(EnCoursBean enCours, int nbResa){

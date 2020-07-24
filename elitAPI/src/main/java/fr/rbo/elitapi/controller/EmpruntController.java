@@ -223,7 +223,7 @@ public class EmpruntController {
     /**
      * renvoie la liste des emprunts en cours
      * @param id de l'ouvrage
-     * @return liste des emprunts en retards pour un ouvrage
+     * @return liste des emprunts en cours pour un ouvrage
      */
     @GetMapping(value="/emprunts/encours/{id}")
     public EnCours etatEmpruntEnCours(@PathVariable("id") long id) {
@@ -232,8 +232,10 @@ public class EmpruntController {
                 new NotFoundException("Ouvrage inexistant"));
         List<Emprunt> emprunts = empruntRepository.findAllByOuvrageAndEmpruntRenduFalse(ouvrageRecherche);
         LOGGER.debug("emprunts " + emprunts.size());
-        if (emprunts.isEmpty()) throw new NotFoundException("Aucun emprunt en cours pour cet ouvrage");
-        EnCours enCours = infoEmpruntsEnCours(emprunts);
+        EnCours enCours = new EnCours(id,0,null);
+        if (!emprunts.isEmpty()){
+            enCours = infoEmpruntsEnCours(emprunts);
+        }
         return enCours;
     }
 

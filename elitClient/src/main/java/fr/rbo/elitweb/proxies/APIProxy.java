@@ -10,8 +10,6 @@ import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.beans.RoleBean;
 import fr.rbo.elitweb.beans.UserBean;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -48,6 +46,10 @@ public interface APIProxy {
 
     @RequestLine("GET /reservations")
     List<ReservationBean> listeDesReservations();
+    @RequestLine("GET /reservation/{id}")
+    ReservationBean findReservationById(@Param("id") int id);
+    @RequestLine("POST /reservations/recherche/criteres")
+    List<ReservationBean> rechercheReservationCriteres(@RequestBody ReservationBean reservation);
     @RequestLine("GET /reservations/ouvrage/{id}")
     List<ReservationBean> listeDesReservationsDeLOuvrage(@Param("id") int id);
     @RequestLine("GET /reservations/user/{id}")
@@ -56,7 +58,7 @@ public interface APIProxy {
     ReservationBean creerReservation (@RequestBody ReservationBean reservation);
     @RequestLine("GET /reservation/notification/{id}")
     ReservationBean notififierDisponibiliteOuvrageReserve (@Param("id") int id);
-    @RequestLine("GET /reservation/inverseEtat/{id}")
+    @RequestLine("PUT /reservation/inverseEtat/{id}")
     ReservationBean switchEtatReservation (@Param("id") int id);
 
     @RequestLine("GET /user/{id}")

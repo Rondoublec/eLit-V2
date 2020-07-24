@@ -6,8 +6,9 @@ import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import fr.rbo.elitapi.exceptions.NotFoundException;
-import fr.rbo.elitapi.repository.OuvrageRepository;
 import fr.rbo.elitapi.repository.ReservationRepository;
+import fr.rbo.elitapi.repository.ReservationRepositoryInterface;
+import fr.rbo.elitapi.repository.OuvrageRepository;
 import fr.rbo.elitapi.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class ReservationController {
 
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    ReservationRepositoryInterface reservationRecherche;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -45,6 +48,34 @@ public class ReservationController {
         List<Reservation> reservations = reservationRepository.findAll();
         if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas de reservation en cours");
         return reservations;
+    }
+
+    /**
+     * renvoie la liste des reservations répondants aux critères  action et/ou reservationCherche
+     * @param action demandée
+     * @param reservationCherche critères
+     * @return liste des reservations correspondants au critères
+     */
+    @PostMapping(value="/reservations/recherche/{action}")
+    public List<Reservation> listeDesReservationsSelonCriteres( @PathVariable("action") String action
+            , @RequestBody Reservation reservationCherche){
+        LOGGER.debug("Post /reservations/recherche/{action} " + action);
+        List<Reservation> reservations = reservationRecherche.rechercheReservation(reservationCherche, action);
+        if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas d'ouvrage correspondant à votre recherche");
+        return reservations;
+    }
+
+    /**
+     * renvoie les informations de la réservation correspondant à l'id
+     * @param id de la réservation
+     * @return emprunt
+     */
+    @GetMapping(value = "/reservation/{id}")
+    public Optional<Reservation> recupererUneReservation (@PathVariable("id") Long id){
+        LOGGER.debug("Get /reservation/{id} " + id);
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if (!reservation.isPresent()) throw new NotFoundException("Cette réservation n'existe pas");
+        return reservation;
     }
 
     /**
@@ -127,9 +158,9 @@ public class ReservationController {
      * @param id de la reservation
      * @return emprunt
      */
-    @GetMapping(value = "/reservation/inverseEtat/{id}")
+    @PutMapping(value = "/reservation/inverseEtat/{id}")
     public Reservation switchEtatReservation (@PathVariable("id") Long id){
-        LOGGER.debug("Get /reservation/inverseEtat/{" + id + "}");
+        LOGGER.debug("Put /reservation/inverseEtat/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Reservation inexistante, non trouvée"));
         if (reservation.getReservationActive()) {
