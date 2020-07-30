@@ -1,5 +1,7 @@
 package fr.rbo.elitweb.controller;
 
+import fr.rbo.elitweb.beans.EmpruntBean;
+import fr.rbo.elitweb.beans.EnCoursBean;
 import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.beans.UserBean;
 import fr.rbo.elitweb.exceptions.NotAcceptableException;
@@ -69,6 +71,47 @@ public class ReservationController {
         model.addAttribute("reservationCriteres", reservationCriteres);
         model.addAttribute("reservations", reservations);
         return "recherche-reservations-list";
+    }
+
+    /**
+     * Affiche les informations de la réservation, ainsi que
+     * la liste des réservations actives pour cet ouvrage
+     * et la liste des emprunt en cours avec leurs dates de retour prévues
+     * @param reservationId de la réservation
+     * @param model model
+     * @param redirectAttributes attributs valorisés de la redirection
+     * @return la réservation de l'utilisateur et les liste d'attente et date prévues de retrour
+     */
+    @RequestMapping(value = "/reservation/details", method = RequestMethod.GET)
+    public String details(@RequestParam("reservationId") int reservationId, Model model
+            , final RedirectAttributes redirectAttributes) {
+        LOGGER.debug("Get /reservation/details reservationId : " + reservationId);
+        ReservationBean reservation = null;
+        try {
+            reservation = apiProxy.findReservationById(reservationId);
+        } catch (NotFoundException e) {
+            redirectAttributes.addFlashAttribute("status", "notFound");
+            model.addAttribute("status", "notFound");
+            return "redirect:/mesreservations";
+        }
+        model.addAttribute("reservation", reservation);
+
+        List<ReservationBean> reservationsOuvrage = null;
+        reservationsOuvrage =
+                apiProxy.listeDesReservationsDeLOuvrage((int) (long) reservation.getOuvrage().getOuvrageId());
+        model.addAttribute("reservationsOuvrage", reservationsOuvrage);
+        model.addAttribute("moi", recupUser().getEmail());
+
+        EmpruntBean empruntCriteres = new EmpruntBean();
+        empruntCriteres.setOuvrage(reservation.getOuvrage());
+        empruntCriteres.setEmpruntRendu(false);
+        List<EmpruntBean> empruntsOuvrage = null;
+        try {
+            empruntsOuvrage = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
+        } catch(NotFoundException e){}
+        model.addAttribute("empruntsOuvrage", empruntsOuvrage);
+
+        return "details-reservation";
     }
 
     /**
