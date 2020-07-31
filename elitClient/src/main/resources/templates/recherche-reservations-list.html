@@ -53,6 +53,16 @@
                 <strong>OK !</strong> - Annulation r&eacute;alis&eacute;e avec succ&egrave;s.
             </div>
         </div>
+        <div th:if="${resa eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong> - R&eacute;servation r&eacute;alis&eacute;e avec succ&egrave;s.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>OK !</strong> - R&eacute;servation impossible contactez la biblioth&egrave;que.
+            </div>
+        </div>
 
     </div>
 

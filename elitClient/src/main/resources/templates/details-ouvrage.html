@@ -4,8 +4,8 @@
     <title>Détails de l'ouvrage</title>
 
     <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
-    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}"/>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="../webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
     <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
@@ -67,18 +67,26 @@
                             </tr>
                         </span>
                         <span th:if="${isdisponible} == false">
-                            <span th:if="${encours.getNbEncours()} > 0">
+                            <span th:if="${encours.nbEncours} > 0">
                                 <tr>
                                     <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
                                         <span th:if="${isreservable} == true">
                                             <div class="btn btn-outline-primary">
-                                                Réserver cet ouvrage
+                                                <form data-toggle="validator" role="form" th:object="${ouvrage}" th:action="@{/reservation/demande}" method="post">
+		                                            <button type="submit" class="btn btn-primary">Réserver cet ouvrage</button>
+		                                            <input type="hidden" id="ouvrageId" name="ouvrageId" th:value="${ouvrage.ouvrageId}">
+                                                </form>
                                             </div>
+
                                         </span>
                                         <span th:if="${isreservable} == false">
                                                 Non réservable, quota de la liste d'attente dépassé
                                         </span>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Emprunt(s) en cours</th>
+                                    <td th:text="${encours.nbEncours}"></td>
                                 </tr>
                                 <tr>
                                     <th>1er retour à partir du</th>
@@ -89,7 +97,7 @@
                                     <td th:text="${nbresa}"></td>
                                 </tr>
                             </span>
-                            <span th:if="${encours.getNbEncours()} == 0">
+                            <span th:if="${encours.nbEncours} == 0">
                                 <tr>
                                     <td colspan="2"><b><i>Ouvrage indisponible&nbsp;&nbsp;&nbsp;</i></b>
                                         <span th:if="${isreservable} == true">

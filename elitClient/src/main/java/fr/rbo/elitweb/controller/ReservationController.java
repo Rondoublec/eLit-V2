@@ -2,6 +2,7 @@ package fr.rbo.elitweb.controller;
 
 import fr.rbo.elitweb.beans.EmpruntBean;
 import fr.rbo.elitweb.beans.EnCoursBean;
+import fr.rbo.elitweb.beans.OuvrageBean;
 import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.beans.UserBean;
 import fr.rbo.elitweb.exceptions.NotAcceptableException;
@@ -71,6 +72,27 @@ public class ReservationController {
         model.addAttribute("reservationCriteres", reservationCriteres);
         model.addAttribute("reservations", reservations);
         return "recherche-reservations-list";
+    }
+
+    @RequestMapping(value="/reservation/demande", method = RequestMethod.POST)
+    public String ReservationsDemande(Model model, HttpSession httpSession
+            , @RequestParam("ouvrageId") long ouvrageId
+            , final RedirectAttributes redirectAttributes){
+        LOGGER.debug("Post /reservation/demande ouvrageId : " + ouvrageId);
+        ReservationBean reservation = new ReservationBean();
+        reservation.setUser(recupUser());
+        OuvrageBean ouvrage = new OuvrageBean();
+        ouvrage.setOuvrageId(ouvrageId);
+        reservation.setOuvrage(ouvrage);
+
+        try {
+            apiProxy.creerReservation(reservation);
+            redirectAttributes.addFlashAttribute("resa","success");
+        } catch(NotFoundException e){
+            redirectAttributes.addFlashAttribute("resa","unsuccess");
+        }
+
+        return "redirect:/mesreservations";
     }
 
     /**

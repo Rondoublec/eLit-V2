@@ -123,8 +123,10 @@ public class ReservationController {
 //        if (RG001) {
 //            throw new NotAcceptableException("Réservation impossible, ...");
 //        }
-        User user = userRepository.findById(reservation.getUser().getId()).orElseThrow(() ->
-                new NotFoundException("Utilisateur inconnu"));
+        User user = userRepository.findByEmail(reservation.getUser().getEmail());
+        if (user == null) {
+            throw new NotFoundException("Utilisateur inconnu");
+        }
         // TODO règles de gestion sur les emprunts et reservations de l'utilisateur
 
         reservation.setUser(user);
