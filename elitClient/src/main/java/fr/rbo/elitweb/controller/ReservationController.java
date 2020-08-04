@@ -1,10 +1,10 @@
 package fr.rbo.elitweb.controller;
 
 import fr.rbo.elitweb.beans.EmpruntBean;
-import fr.rbo.elitweb.beans.EnCoursBean;
 import fr.rbo.elitweb.beans.OuvrageBean;
 import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.beans.UserBean;
+import fr.rbo.elitweb.exceptions.ConflictException;
 import fr.rbo.elitweb.exceptions.NotAcceptableException;
 import fr.rbo.elitweb.exceptions.NotFoundException;
 import fr.rbo.elitweb.proxies.APIProxy;
@@ -87,9 +87,13 @@ public class ReservationController {
 
         try {
             apiProxy.creerReservation(reservation);
-            redirectAttributes.addFlashAttribute("resa","success");
-        } catch(NotFoundException e){
-            redirectAttributes.addFlashAttribute("resa","unsuccess");
+            redirectAttributes.addFlashAttribute("resa", "success");
+        } catch (NotAcceptableException e) {
+            redirectAttributes.addFlashAttribute("resa", "unsuccess001");
+        } catch (ConflictException e) {
+            redirectAttributes.addFlashAttribute("resa", "unsuccess002");
+        } catch (NotFoundException e) {
+            redirectAttributes.addFlashAttribute("resa", "unsuccess404");
         }
 
         return "redirect:/mesreservations";

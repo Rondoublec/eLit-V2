@@ -11,6 +11,9 @@ public class CustomErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String invoqueur, Response reponse) {
 
+        if(reponse.status() == 409 ) {
+            return new ConflictException("Erreur : 409 ");
+        }
         if(reponse.status() == 406 ) {
             return new NotAcceptableException("Erreur : 406 ");
         }

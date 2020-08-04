@@ -4,8 +4,10 @@ import fr.rbo.elitapi.entity.Emprunt;
 import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
+import fr.rbo.elitapi.exceptions.ConflictException;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import fr.rbo.elitapi.exceptions.NotFoundException;
+import fr.rbo.elitapi.repository.EmpruntRepository;
 import fr.rbo.elitapi.repository.ReservationRepository;
 import fr.rbo.elitapi.repository.ReservationRepositoryInterface;
 import fr.rbo.elitapi.repository.OuvrageRepository;
@@ -36,6 +38,8 @@ public class ReservationController {
     UserRepository userRepository;
     @Autowired
     OuvrageRepository ouvrageRepository;
+    @Autowired
+    EmpruntRepository empruntRepository;
 
 
     /**
@@ -118,16 +122,13 @@ public class ReservationController {
         LOGGER.debug("Post /reservation/ajout");
         Ouvrage ouvrage = ouvrageRepository.findById(reservation.getOuvrage().getOuvrageId()).orElseThrow(() ->
                 new NotFoundException("Ouvrage inconnu"));
-        // TODO règles de gestion sur les quantités
-        // TODO règles de gestion sur les états
-//        if (RG001) {
-//            throw new NotAcceptableException("Réservation impossible, ...");
-//        }
+
         User user = userRepository.findByEmail(reservation.getUser().getEmail());
         if (user == null) {
             throw new NotFoundException("Utilisateur inconnu");
         }
-        // TODO règles de gestion sur les emprunts et reservations de l'utilisateur
+
+        controlesMetier(ouvrage, user);
 
         reservation.setUser(user);
         reservation.setOuvrage(ouvrage);
@@ -172,6 +173,37 @@ public class ReservationController {
         }
         reservationRepository.save(reservation);
         return reservation;
+    }
+
+    private void controlesMetier (Ouvrage ouvrage, User user) {
+
+        // RG001 : Si la liste des réservation en cours est > à 2 fois le stock, on ne peut pas ajouter une réservation supplémentaire
+        List<Emprunt> emprunts = empruntRepository.findAllByOuvrageAndEmpruntRenduFalse(ouvrage);
+        LOGGER.debug("/reservation/ajout -> emprunts en cours    :" + emprunts.size());
+        int maxReservation = (Integer.parseInt(ouvrage.getOuvrageQuantite()) + emprunts.size()) * 2;
+        LOGGER.debug("/reservation/ajout -> maxReservation       : " + maxReservation);
+        List<Reservation> reservations = reservationRepository.findAllByOuvrageAndReservationActiveTrue(ouvrage);
+        int nbReservationEnAttente  = reservations.size();
+        LOGGER.debug("/reservation/ajout -> reservations actives : " + nbReservationEnAttente);
+        if (nbReservationEnAttente >= maxReservation) {
+            LOGGER.debug("RG001 : Réservation impossible, quotat de réservation en attente atteint ! " + nbReservationEnAttente);
+            throw new NotAcceptableException("RG001 : Réservation impossible, quotat de réservation en attente atteint ! ");
+        }
+
+        // RG002 :  si l'usager a déjà cet emprunt en cours il ne peut le réserver sur le même ouvrage
+        Emprunt emprunt = empruntRepository.findByUserAndOuvrageAndEmpruntRenduFalse(user, ouvrage);
+        if (emprunt != null) {
+            LOGGER.debug("RG002 : Réservation impossible, l'usager a un emprunt en cours sur cet ouvrage ! " + emprunt.getEmpruntId());
+            throw new ConflictException("RG002 : Réservation impossible, l'usager a un emprunt en cours sur cet ouvrage ! ");
+        }
+
+        // RG003:  si l'usager a déjà une réservation active pour cet ouvrage il ne peut le réserver sur le même ouvrage
+        Reservation reservation1 = reservationRepository.findByUserAndOuvrageAndReservationActiveTrue(user, ouvrage);
+        if (reservation1 != null) {
+            LOGGER.debug("RG003 : Réservation impossible, l'usager a une réservation active pour cet ouvrage ! " + reservation1.getReservationId());
+            throw new ConflictException("RG003 : Réservation impossible, l'usager a une réservation active pour cet ouvrage ! ");
+        }
+
     }
 
 }

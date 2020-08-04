@@ -45,7 +45,7 @@
         </div>
         <div th:if="${annul eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong> - Annulation impossible, cet réservation n'est pas active.
+                <strong>Echec !</strong> - Annulation impossible, cet réservation n'est pas active.
             </div>
         </div>
         <div th:if="${annul eq 'success'}">
@@ -58,9 +58,19 @@
                 <strong>OK !</strong> - R&eacute;servation r&eacute;alis&eacute;e avec succ&egrave;s.
             </div>
         </div>
-        <div th:if="${resa eq 'unsuccess'}">
+        <div th:if="${resa eq 'unsuccess001'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>OK !</strong> - R&eacute;servation impossible contactez la biblioth&egrave;que.
+                <strong>Echec !</strong> - R&eacute;servation impossible : Liste d'attente trop importante, r&eacute;essayez dans quelques jours ou contactez votre biblioth&egrave;que.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess002'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - R&eacute;servation impossible : Vous avez un emprunt en cours ou une r&eacute;servation active pour cet ouvrage. Si ce n'est pas le cas, contactez votre biblioth&egrave;que.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess404'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - R&eacute;servation impossible : contactez votre biblioth&egrave;que.
             </div>
         </div>
 

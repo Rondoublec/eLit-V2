@@ -16,6 +16,8 @@ public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
     List<Emprunt> findAllByUserAndEmpruntDateFinIsBeforeAndEmpruntDateProlongationIsNullAndEmpruntDateRetourIsNull(User user, Date dateJour);
     List<Emprunt> findAllByUserAndEmpruntDateProlongationIsBeforeAndEmpruntDateRetourIsNull(User user, Date dateJour);
     List<Emprunt> findAllByOuvrageAndEmpruntRenduFalse(Ouvrage ouvrage);
+    Emprunt findByUserAndOuvrageAndEmpruntRenduFalse(User user, Ouvrage ouvrage);
+
 
 }
 

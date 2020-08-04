@@ -1,5 +1,6 @@
 package fr.rbo.elitapi.repository;
 
+import fr.rbo.elitapi.entity.Emprunt;
 import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
@@ -15,5 +16,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByUserAndReservationActiveTrue(User user);
     List<Reservation> findAllByUserAndOuvrageAndReservationActiveTrue(User user, Ouvrage ouvrage);
     List<Reservation> findAllByOuvrageAndUserAndReservationActiveTrue(Ouvrage ouvrage, User user);
+    Reservation findByUserAndOuvrageAndReservationActiveTrue(User user, Ouvrage ouvrage);
 
 }
