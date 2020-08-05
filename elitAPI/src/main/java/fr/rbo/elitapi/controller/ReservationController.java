@@ -145,7 +145,7 @@ public class ReservationController {
      * @return emprunt
      */
     @GetMapping(value = "/reservation/notification/{id}")
-    public Reservation notififierDisponibiliteOuvrageReserve (@PathVariable("id") Long id){
+    public Reservation notififierDisponibiliteOuvrageReserve(@PathVariable("id") Long id){
         LOGGER.debug("Get /reservation/notification/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Reservation inexistante, non trouvée"));

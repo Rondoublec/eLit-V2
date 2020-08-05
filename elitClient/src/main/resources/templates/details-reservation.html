@@ -85,11 +85,25 @@
                                         </td>
                                     </tr>
                                     <tr th:each="reservation : ${reservationsOuvrage}">
-                                        <td th:text="${reservation.ouvrage.ouvrageTitre}"></td>
-                                        <td th:text="${#dates.format(reservation.reservationDateDemande, 'dd-MM-yyyy')}"></td>
+                                        <td>
+                                            <a th:title="${reservation.reservationId}" data-toggle="tooltip" data-placement="top">
+                                                <div th:text="${reservation.ouvrage.ouvrageTitre}"></div>
+                                            </a>
+                                        </td>
+                                        <td><div th:text="${#dates.format(reservation.reservationDateDemande, 'dd-MM-yyyy')}"></div></td>
                                         <td>
                                             <span th:if="${reservation.user.email.equals(moi)}">
-                                                Ma réservation
+                                                <a th:title="${reservation.user.email}" data-toggle="tooltip" data-placement="top">
+                                                    <b>Ma demande</b>
+                                                </a>
+                                            </span>
+                                            <span th:if="${!reservation.user.email.equals(moi)}">
+                                                <a th:title="${reservation.user.email}" data-toggle="tooltip" data-placement="top">
+                                                    Autre demandeur
+                                                </a>
+                                            </span>
+                                            <span th:if="${reservation.reservationDateNotif} != null">
+                                                <b>notifi&eacute; le <span th:text="${#dates.format(reservation.reservationDateNotif, 'dd-MM-yyyy')}"></span></b>
                                             </span>
                                         </td>
                                     </tr>
@@ -119,7 +133,11 @@
                                         <td colspan="7" align="center">Auncun emprunt trouvé !!!</td>
                                     </tr>
                                     <tr th:each="emprunt : ${empruntsOuvrage}">
-                                        <td th:text="${emprunt.ouvrage.ouvrageTitre}"></td>
+                                        <td>
+                                            <a th:title="${emprunt.empruntId}" data-toggle="tooltip" data-placement="top">
+                                                <div th:text="${emprunt.ouvrage.ouvrageTitre}"></div>
+                                            </a>
+                                        </td>
                                         <td>
                                             <span th:if="${emprunt.empruntProlongation} == false">
                                                 <div th:text="${#dates.format(emprunt.empruntDateFin, 'dd-MM-yyyy')}"></div>

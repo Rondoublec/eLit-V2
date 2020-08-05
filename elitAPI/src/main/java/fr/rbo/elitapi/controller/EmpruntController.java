@@ -3,12 +3,14 @@ package fr.rbo.elitapi.controller;
 import fr.rbo.elitapi.entity.Emprunt;
 import fr.rbo.elitapi.entity.EnCours;
 import fr.rbo.elitapi.entity.Ouvrage;
+import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import fr.rbo.elitapi.exceptions.NotFoundException;
 import fr.rbo.elitapi.repository.EmpruntRepository;
 import fr.rbo.elitapi.repository.EmpruntRepositoryInterface;
 import fr.rbo.elitapi.repository.OuvrageRepository;
+import fr.rbo.elitapi.repository.ReservationRepository;
 import fr.rbo.elitapi.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,10 @@ public class EmpruntController {
     UserRepository userRepository;
     @Autowired
     OuvrageRepository ouvrageRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
+    @Autowired
+    ReservationController reservationController;
 
     /**
      * renvoie la liste des emprunts
@@ -177,6 +183,19 @@ public class EmpruntController {
         emprunt.setEmpruntDateRetour(Calendar.getInstance().getTime());
         emprunt.setEmpruntRendu(true);
         empruntRepository.save(emprunt);
+
+        // Recherche si réservation en attente non notifiées
+        // Si c'est le cas notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
+        List<Reservation> reservations =
+                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(ouvrage);
+        if (!reservations.isEmpty()) {
+            // TODO envoyer un mail de notification à l'utilisateur
+            String usagerANotifier = (reservations.get(0).getUser().getEmail());
+
+            // mise à jour de la date de notification
+            reservationController.notififierDisponibiliteOuvrageReserve(reservations.get(0).getReservationId());
+        }
+
         return emprunt;
     }
 
