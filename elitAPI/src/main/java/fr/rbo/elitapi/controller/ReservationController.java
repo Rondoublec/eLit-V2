@@ -92,7 +92,8 @@ public class ReservationController {
         LOGGER.debug("Get /reservations/ouvrage/{" + id + "}");
         Ouvrage ouvrageRecherche = ouvrageRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Ouvrage inexistant"));
-        List<Reservation> reservations = reservationRepository.findAllByOuvrageAndReservationActiveTrue(ouvrageRecherche);
+        List<Reservation> reservations =
+                reservationRepository.findAllByOuvrageAndReservationActiveTrueOrderByReservationDateDemandeAsc(ouvrageRecherche);
         if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas de reservation en cours pour cet ouvrage");
         return reservations;
     }
@@ -186,8 +187,8 @@ public class ReservationController {
         int nbReservationEnAttente  = reservations.size();
         LOGGER.debug("/reservation/ajout -> reservations actives : " + nbReservationEnAttente);
         if (nbReservationEnAttente >= maxReservation) {
-            LOGGER.debug("RG001 : Réservation impossible, quotat de réservation en attente atteint ! " + nbReservationEnAttente);
-            throw new NotAcceptableException("RG001 : Réservation impossible, quotat de réservation en attente atteint ! ");
+            LOGGER.debug("RG001 : Réservation impossible, quotat de réservation en attente atteint ou rupture définitive ! " + nbReservationEnAttente);
+            throw new NotAcceptableException("RG001 : Réservation impossible, quotat de réservation en attente atteint ou rupture définitive ! ");
         }
 
         // RG002 :  si l'usager a déjà cet emprunt en cours il ne peut le réserver sur le même ouvrage

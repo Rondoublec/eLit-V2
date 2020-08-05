@@ -78,7 +78,10 @@ public class EmpruntRepositoryImpl implements EmpruntRepositoryInterface {
             }
         } catch (NullPointerException e) {}
 
-        if (!predicates.isEmpty()) cq.where(predicates.toArray(new Predicate[0]));
+        if (!predicates.isEmpty()) {
+            cq.where(predicates.toArray(new Predicate[0]));
+            cq.orderBy(cb.asc(emprunt.get("empruntDateProlongation")),cb.asc(emprunt.get("empruntDateFin")));
+        }
         return em.createQuery(cq).getResultList();
     }
 }

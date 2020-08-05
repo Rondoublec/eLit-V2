@@ -48,6 +48,7 @@ public class EmpruntController {
             emprunts = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
         } catch(NotFoundException e){}
         model.addAttribute("datedujour",Calendar.getInstance().getTime());
+        model.addAttribute("titre", "Mes emprunts");
         model.addAttribute("empruntCriteres", empruntCriteres);
         model.addAttribute("emprunts", emprunts);
         return "recherche-emprunts-list";
@@ -69,6 +70,7 @@ public class EmpruntController {
             emprunts = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
         } catch(NotFoundException e){}
         model.addAttribute("datedujour",Calendar.getInstance().getTime());
+        model.addAttribute("titre", "Résultats de la recherche");
         model.addAttribute("empruntCriteres", empruntCriteres);
         model.addAttribute("emprunts", emprunts);
         return "recherche-emprunts-list";

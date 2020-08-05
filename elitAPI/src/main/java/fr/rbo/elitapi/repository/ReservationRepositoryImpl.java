@@ -68,7 +68,10 @@ public class ReservationRepositoryImpl implements ReservationRepositoryInterface
             }
         } catch (NullPointerException e) {}
 
-        if (!predicates.isEmpty()) cq.where(predicates.toArray(new Predicate[0]));
+        if (!predicates.isEmpty()) {
+            cq.where(predicates.toArray(new Predicate[0]));
+            cq.orderBy(cb.asc(reservation.get("reservationDateDemande")));
+        }
         return em.createQuery(cq).getResultList();
     }
 }

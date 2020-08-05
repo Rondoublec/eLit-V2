@@ -48,6 +48,7 @@ public class ReservationController {
         try {
             reservations = apiProxy.rechercheReservationCriteres(reservationCriteres);
         } catch(NotFoundException e){}
+        model.addAttribute("titre", "Mes réservations");
         model.addAttribute("reservationCriteres", reservationCriteres);
         model.addAttribute("reservations", reservations);
         return "recherche-reservations-list";
@@ -69,6 +70,7 @@ public class ReservationController {
         try {
             reservations = apiProxy.rechercheReservationCriteres(reservationCriteres);
         } catch(NotFoundException e){}
+        model.addAttribute("titre", "Résultats de la recherche");
         model.addAttribute("reservationCriteres", reservationCriteres);
         model.addAttribute("reservations", reservations);
         return "recherche-reservations-list";

@@ -76,6 +76,7 @@
 
     </div>
 
+    <h3 class="panel-title" th:utext="${titre}"></h3>
     <div class="col-md-12">
         <form data-toggle="validator" role="form" th:object="${reservationCriteres}" th:action="@{/mesreservations}" method="post">
             <table class="table table-striped">
