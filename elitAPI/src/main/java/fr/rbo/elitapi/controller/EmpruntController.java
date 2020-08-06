@@ -187,13 +187,10 @@ public class EmpruntController {
         // Recherche si réservation en attente non notifiées
         // Si c'est le cas notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
         List<Reservation> reservations =
-                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(ouvrage);
+                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndNotifierFalseAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(ouvrage);
         if (!reservations.isEmpty()) {
-            // TODO envoyer un mail de notification à l'utilisateur
-            String usagerANotifier = (reservations.get(0).getUser().getEmail());
-
-            // mise à jour de la date de notification
-            reservationController.notififierDisponibiliteOuvrageReserve(reservations.get(0).getReservationId());
+            // mise à jour du flag "à notifier" pour que le batch notifie l'utilisateur (mail + maj date de notification)
+            reservationController.switchNotifier(reservations.get(0).getReservationId());
         }
 
         return emprunt;

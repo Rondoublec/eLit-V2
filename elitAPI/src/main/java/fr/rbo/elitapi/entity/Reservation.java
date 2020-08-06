@@ -27,6 +27,7 @@ public class Reservation {
     private Date reservationDateNotif;
     @NotNull
     private Boolean reservationActive;
+    private Boolean notifier;
 
     public long getReservationId() {
         return reservationId;
@@ -75,4 +76,13 @@ public class Reservation {
     public void setReservationActive(Boolean reservationActive) {
         this.reservationActive = reservationActive;
     }
+
+    public Boolean getNotifier() {
+        return notifier;
+    }
+
+    public void setNotifier(Boolean notifier) {
+        this.notifier = notifier;
+    }
+
 }

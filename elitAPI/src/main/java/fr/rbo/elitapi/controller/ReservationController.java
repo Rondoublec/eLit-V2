@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class ReservationController {
     /**
      * renvoie les informations de la réservation correspondant à l'id
      * @param id de la réservation
-     * @return emprunt
+     * @return reservation
      */
     @GetMapping(value = "/reservation/{id}")
     public Optional<Reservation> recupererUneReservation (@PathVariable("id") Long id){
@@ -133,6 +134,7 @@ public class ReservationController {
 
         reservation.setUser(user);
         reservation.setOuvrage(ouvrage);
+        reservation.setNotifier(false);
         reservation.setReservationActive(true);
         reservation.setReservationDateDemande(Calendar.getInstance().getTime());
         reservationRepository.save(reservation);
@@ -142,7 +144,7 @@ public class ReservationController {
     /**
      * met à jour sur la reservation de la date de notification
      * @param id de la reservation
-     * @return emprunt
+     * @return reservation
      */
     @GetMapping(value = "/reservation/notification/{id}")
     public Reservation notififierDisponibiliteOuvrageReserve(@PathVariable("id") Long id){
@@ -153,14 +155,15 @@ public class ReservationController {
             throw new NotAcceptableException("Demande éronnée, notification déjà effectuée");
         }
         reservation.setReservationDateNotif(Calendar.getInstance().getTime());
+        reservation.setNotifier(false);
         reservationRepository.save(reservation);
         return reservation;
     }
 
     /**
-     * inverse le statut de reservation : reservationActive true / false
+     * inverse le statut de la reservation : reservationActive true / false
      * @param id de la reservation
-     * @return emprunt
+     * @return reservation
      */
     @PutMapping(value = "/reservation/inverseEtat/{id}")
     public Reservation switchEtatReservation (@PathVariable("id") Long id){
@@ -174,6 +177,39 @@ public class ReservationController {
         }
         reservationRepository.save(reservation);
         return reservation;
+    }
+
+    /**
+     * inverse le flag "à notifier" de la reservation : notifier true / false
+     * @param id de la reservation
+     * @return reservation
+     */
+    @PutMapping(value = "/reservation/inverseNotifier/{id}")
+    public Reservation switchNotifier (@PathVariable("id") Long id){
+        LOGGER.debug("Put /reservation/inverseNotifier/{" + id + "}");
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Reservation inexistante, non trouvée"));
+        if (reservation.getNotifier()) {
+            reservation.setNotifier(false);
+        } else {
+            reservation.setNotifier(true);
+        }
+        reservationRepository.save(reservation);
+        return reservation;
+    }
+
+    /**
+     * renvoie la liste des reservations à notifier
+     * @return liste des reservations
+     */
+    @GetMapping(value="/reservations/anotifier")
+    public List<Reservation> listeDesReservationsAnotifier(){
+        LOGGER.debug("Get /reservations/anotifier");
+        List<Reservation> reservations =
+                reservationRepository.findAllByNotifierTrueAndReservationActiveTrueAndReservationDateNotifIsNull();
+
+        if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas de reservation à notifier");
+        return reservations;
     }
 
     private void controlesMetier (Ouvrage ouvrage, User user) {
