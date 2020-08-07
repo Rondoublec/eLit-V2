@@ -30,7 +30,7 @@ public class RelanceRetards {
     /**
      * Itère sur la liste des adhérents des bibiliothèques
      * Et pour chaque adhérent va rechercher les ouvrages en retard, emprunt en cours dont la date de restitution (prolongation comprise) est dépassée
-     * Et pour envoi un email au adhérents concernés
+     * Et envoi un email aux adhérents concernés
      */
     public void mailsDeRelances() {
         LOGGER.info("Début du traitement : mailsDeRelances");

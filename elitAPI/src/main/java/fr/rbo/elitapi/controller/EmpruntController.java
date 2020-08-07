@@ -133,6 +133,11 @@ public class EmpruntController {
         }
         User user = userRepository.findById(emprunt.getUser().getId()).orElseThrow(() ->
                 new NotFoundException("Utilisateur inconnu"));
+
+        if (!isEmpruntable(ouvrage, user)) {
+            throw new NotAcceptableException("Emprunt impossible, ouvrage réservé non disponible");
+        }
+
         // Vérifs OK, mise à jour de la quantité d'ouvrages restante avant de créer l'emprunt TODO gérer le rollback
         Integer qte = Integer.parseInt(ouvrage.getOuvrageQuantite())-1;
         ouvrage.setOuvrageQuantite(qte.toString());
@@ -145,6 +150,18 @@ public class EmpruntController {
         emprunt.setEmpruntRelance(false);
         emprunt.setEmpruntRendu(false);
         empruntRepository.save(emprunt);
+
+        // Si l'usager avait une réservation sur cet ouvrage, alors supprimer la réservation (reservationsActive à false)
+        List<Reservation> reservations = null;
+        reservations = reservationRepository.findAllByOuvrageAndUserAndReservationActiveTrue(ouvrage, user);
+        if (reservations != null) {
+            for (Reservation reservation : reservations) {
+                reservation.setNotifier(false);
+                reservation.setReservationActive(false);
+                reservationRepository.save(reservation);
+            }
+        }
+
         return emprunt;
     }
     /**
@@ -184,14 +201,7 @@ public class EmpruntController {
         emprunt.setEmpruntRendu(true);
         empruntRepository.save(emprunt);
 
-        // Recherche si réservation en attente non notifiées
-        // Si c'est le cas notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
-        List<Reservation> reservations =
-                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndNotifierFalseAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(ouvrage);
-        if (!reservations.isEmpty()) {
-            // mise à jour du flag "à notifier" pour que le batch notifie l'utilisateur (mail + maj date de notification)
-            reservationController.switchNotifier(reservations.get(0).getReservationId());
-        }
+        reservationActiveaNotifier(ouvrage);
 
         return emprunt;
     }
@@ -255,12 +265,42 @@ public class EmpruntController {
         return enCours;
     }
 
+    private void reservationActiveaNotifier(Ouvrage o){
+        // Recherche si réservation en attente non notifiées
+        // Si c'est le cas notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
+        List<Reservation> reservations =
+                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndNotifierFalseAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(o);
+        if (!reservations.isEmpty()) {
+            // mise à jour du flag "à notifier" pour que le batch notifie l'utilisateur (mail + maj date de notification)
+            reservationController.switchNotifier(reservations.get(0).getReservationId());
+        }
+    }
+
+    private Boolean isEmpruntable (Ouvrage o, User u){
+        Boolean isReservationValide = false;
+
+        List<Reservation> reservationsActives = reservationRepository.findAllByOuvrageAndReservationActiveTrue(o);
+        if (!reservationsActives.isEmpty()){
+            // s'il y a des réservations actives, il faut vérifier si l'usager a été notifié ou est à notifier
+            for (Reservation reservationActive : reservationsActives) {
+                if ((reservationActive.getUser().getId() == u.getId())
+                        && ((reservationActive.getNotifier()||(reservationActive.getReservationDateNotif()!= null)))) {
+                    isReservationValide = true;
+                }
+            }
+        } else {
+            isReservationValide = true; // s'il n'y a pas de réservation active, l'ouvrage est empruntable
+        }
+        return isReservationValide;
+    }
+
     private Date dateFinPeriode (Date dateDebut, int duree){
         GregorianCalendar dateFin = new GregorianCalendar();
         dateFin.setTime(dateDebut);
         dateFin.add(GregorianCalendar.DATE,duree);
         return dateFin.getTime();
     }
+
     private EnCours infoEmpruntsEnCours (List<Emprunt> emprunts){
         EnCours enCours = new EnCours(emprunts.get(0).getOuvrage().getOuvrageId()
                 ,emprunts.size(),emprunts.get(0).getEmpruntDateFin());

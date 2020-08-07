@@ -1,4 +1,4 @@
-package fr.rbo.elitweb.beans;
+package fr.rbo.elitbatch.beans;
 
 import java.util.Date;
 

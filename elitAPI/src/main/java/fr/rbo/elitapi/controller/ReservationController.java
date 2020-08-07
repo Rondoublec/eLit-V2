@@ -146,7 +146,7 @@ public class ReservationController {
      * @param id de la reservation
      * @return reservation
      */
-    @GetMapping(value = "/reservation/notification/{id}")
+    @PutMapping(value = "/reservation/notification/{id}")
     public Reservation notififierDisponibiliteOuvrageReserve(@PathVariable("id") Long id){
         LOGGER.debug("Get /reservation/notification/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->

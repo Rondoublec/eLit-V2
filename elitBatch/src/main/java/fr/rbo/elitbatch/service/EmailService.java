@@ -1,6 +1,7 @@
 package fr.rbo.elitbatch.service;
 
 import fr.rbo.elitbatch.beans.EmpruntBean;
+import fr.rbo.elitbatch.beans.ReservationBean;
 import fr.rbo.elitbatch.beans.UserBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class EmailService {
      * @param listeEmprunt liste des emprunts
      */
     public void envoiEmailRelance(UserBean user, List<EmpruntBean> listeEmprunt) {
-        LOGGER.info("Envoi mail");
+        LOGGER.info("Envoi mail de relance");
         StringBuilder listeDesEmprunts = new StringBuilder();
         SimpleDateFormat formater = new SimpleDateFormat("'le' dd/MM/yyyy");
 
@@ -50,6 +51,36 @@ public class EmailService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(user.getEmail());
+        mailMessage.setFrom("noreply@nm.fr");
+        mailMessage.setSubject(subject);
+        mailMessage.setText(body);
+
+        mailSender.send(mailMessage);
+    }
+
+    /**
+     * Envoi un mail de notification de disponiblite de l'ouvrage réservé à l'user concerné
+     * @param reservation réservation
+     */
+    public void envoiEmailNotification(ReservationBean reservation) {
+        LOGGER.info("Envoi mail de notification");
+
+        SimpleDateFormat formater = new SimpleDateFormat("'le' dd/MM/yyyy");
+        String newLine = System.getProperty("line.separator");
+
+        String subject = "Votre ouvrage réservé est disponible.";
+        String body = "Bonjour " + reservation.getUser().getName() + " " + reservation.getUser().getLastName() + ", "
+                + newLine + newLine +"L'ouvrage " + reservation.getOuvrage().getOuvrageTitre() + " "
+                + newLine + "que vous avez reservé " + formater.format(reservation.getReservationDateDemande())
+                + " est disponible dans votre bibliothèque municipale."
+                + newLine + newLine + "Pour ne pas pénaliser les autres usagers."
+                + newLine + "Il sera conservé 48 heures après la date de cette notification."
+                + newLine + "Passé ce délais, votre réservation sera annulée et l'ouvrage sera mis à disposition de la personne suivante."
+                + newLine + newLine + "Votre bibliothèque municipale";
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setTo(reservation.getUser().getEmail());
         mailMessage.setFrom("noreply@nm.fr");
         mailMessage.setSubject(subject);
         mailMessage.setText(body);

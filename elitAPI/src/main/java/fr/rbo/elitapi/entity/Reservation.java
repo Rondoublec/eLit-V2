@@ -27,6 +27,7 @@ public class Reservation {
     private Date reservationDateNotif;
     @NotNull
     private Boolean reservationActive;
+    @NotNull
     private Boolean notifier;
 
     public long getReservationId() {
