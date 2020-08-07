@@ -10,6 +10,7 @@ import fr.rbo.elitbatch.proxies.APIProxy;
 import fr.rbo.elitbatch.service.EmailService;
 import fr.rbo.elitbatch.service.NotificationDisponibilite;
 import fr.rbo.elitbatch.service.RelanceRetards;
+import fr.rbo.elitbatch.service.ReservationSurveillance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -30,6 +31,8 @@ class ElitBatchApplicationTest {
     private RelanceRetards relanceRetards;
     @Autowired
     private NotificationDisponibilite notificationDisponibilite;
+    @Autowired
+    private ReservationSurveillance reservationSurveillance;
 
     private EmailService emailService;
     @Autowired
@@ -69,12 +72,14 @@ class ElitBatchApplicationTest {
     }
 
     // @Test
+    public void testTraitementReservation() { reservationSurveillance.gestionDesReservations();}
+    // @Test
     public void testTraitementNotification() {
         notificationDisponibilite.mailsDeNotifications();
     }
     // @Test
     public void testPlanificationNotification(){
-        planificationBatchGestionReservations.PlanificationBatchNotificationCron();
+        planificationBatchGestionReservations.PlanificationBatchReservationEtNotificationCron();
     }
     // @Test
     public void testEnvoiMailNotif() {

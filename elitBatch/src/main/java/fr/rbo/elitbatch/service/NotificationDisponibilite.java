@@ -38,7 +38,7 @@ public class NotificationDisponibilite {
                 System.out.println( "reservation : " + reservation.getReservationId() + " user : " + reservation.getUser().getEmail());
                 try {
                     emailService.envoiEmailNotification(reservation);
-                    apiProxy.majDateNotificationById((int) reservation.getReservationId());
+                    apiProxy.majDateNotificationById(reservation.getReservationId());
                 } catch(NotFoundException e){}
             }
         }

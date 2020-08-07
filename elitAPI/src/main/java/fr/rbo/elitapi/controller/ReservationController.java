@@ -160,6 +160,22 @@ public class ReservationController {
         return reservation;
     }
 
+    @PutMapping(value = "/reservation/anotifier/{id}")
+    public Reservation reservationActiveaNotifier(@PathVariable("id") Long id){
+        // Recherche si réservation non notifiées
+        // SI c'est le cas ALORS notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
+        Ouvrage o = new Ouvrage();
+        o.setOuvrageId(id);
+        List<Reservation> reservations =
+                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndNotifierFalseAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(o);
+        Reservation reservation = null;
+        if (!reservations.isEmpty()) {
+            // mise à jour du flag "à notifier" pour que le batch notifie l'utilisateur (mail + maj date de notification)
+            reservation = switchNotifier(reservations.get(0).getReservationId());
+        }
+        return reservation;
+    }
+
     /**
      * inverse le statut de la reservation : reservationActive true / false
      * @param id de la reservation
@@ -171,6 +187,7 @@ public class ReservationController {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Reservation inexistante, non trouvée"));
         if (reservation.getReservationActive()) {
+            reservation.setNotifier(false);
             reservation.setReservationActive(false);
         } else {
             reservation.setReservationActive(true);
@@ -209,6 +226,20 @@ public class ReservationController {
                 reservationRepository.findAllByNotifierTrueAndReservationActiveTrueAndReservationDateNotifIsNull();
 
         if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas de reservation à notifier");
+        return reservations;
+    }
+
+    /**
+     * renvoie la liste des reservations activees notifiées
+     * @return liste des reservations
+     */
+    @GetMapping(value="/reservations/notifiees")
+    public List<Reservation> listeDesReservationsNotifiees(){
+        LOGGER.debug("Get /reservations/notifiees");
+        List<Reservation> reservations =
+                reservationRepository.findAllByReservationActiveTrueAndReservationDateNotifIsNotNull();
+
+        if (reservations.isEmpty()) throw new NotFoundException("Il n'y a pas de reservation active notifiee");
         return reservations;
     }
 

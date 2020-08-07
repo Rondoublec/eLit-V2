@@ -201,7 +201,7 @@ public class EmpruntController {
         emprunt.setEmpruntRendu(true);
         empruntRepository.save(emprunt);
 
-        reservationActiveaNotifier(ouvrage);
+        reservationController.reservationActiveaNotifier(ouvrage.getOuvrageId());
 
         return emprunt;
     }
@@ -263,17 +263,6 @@ public class EmpruntController {
             enCours = infoEmpruntsEnCours(emprunts);
         }
         return enCours;
-    }
-
-    private void reservationActiveaNotifier(Ouvrage o){
-        // Recherche si réservation en attente non notifiées
-        // Si c'est le cas notifier la réservation la plus ancienne (order by ReservationDateDemande asc)
-        List<Reservation> reservations =
-                reservationRepository.findAllByOuvrageAndReservationActiveTrueAndNotifierFalseAndReservationDateNotifIsNullOrderByReservationDateDemandeAsc(o);
-        if (!reservations.isEmpty()) {
-            // mise à jour du flag "à notifier" pour que le batch notifie l'utilisateur (mail + maj date de notification)
-            reservationController.switchNotifier(reservations.get(0).getReservationId());
-        }
     }
 
     private Boolean isEmpruntable (Ouvrage o, User u){

@@ -20,6 +20,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findAllByUserAndOuvrageAndReservationActiveTrue(User user, Ouvrage ouvrage);
     List<Reservation> findAllByOuvrageAndUserAndReservationActiveTrue(Ouvrage ouvrage, User user);
     List<Reservation> findAllByNotifierTrueAndReservationActiveTrueAndReservationDateNotifIsNull();
+    List<Reservation> findAllByReservationActiveTrueAndReservationDateNotifIsNotNull();
     Reservation findByUserAndOuvrageAndReservationActiveTrue(User user, Ouvrage ouvrage);
 
 }
