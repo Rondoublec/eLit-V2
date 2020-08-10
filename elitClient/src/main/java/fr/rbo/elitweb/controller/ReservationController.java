@@ -27,6 +27,8 @@ import java.util.List;
 public class ReservationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
+    private static final String REDIRECT_MESRESERVATIONS = "redirect:/mesreservations";
+
     @Autowired
     APIProxy apiProxy;
 
@@ -98,7 +100,7 @@ public class ReservationController {
             redirectAttributes.addFlashAttribute("resa", "unsuccess404");
         }
 
-        return "redirect:/mesreservations";
+        return REDIRECT_MESRESERVATIONS;
     }
 
     /**
@@ -120,7 +122,7 @@ public class ReservationController {
         } catch (NotFoundException e) {
             redirectAttributes.addFlashAttribute("status", "notFound");
             model.addAttribute("status", "notFound");
-            return "redirect:/mesreservations";
+            return REDIRECT_MESRESERVATIONS;
         }
         model.addAttribute("reservation", reservation);
 
@@ -159,12 +161,12 @@ public class ReservationController {
         } catch(NotFoundException e){
             redirectAttributes.addFlashAttribute("status","notFound");
             model.addAttribute("status", "notFound");
-            return "redirect:/mesreservations";
+            return REDIRECT_MESRESERVATIONS;
         }
         if (!reservation.getUser().getEmail().equals(recupUser().getEmail())){
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             model.addAttribute("status","notAuthorize");
-            return "redirect:/mesreservations";
+            return REDIRECT_MESRESERVATIONS;
         }
         try {
             reservation = apiProxy.switchEtatReservation(reservationId);
@@ -174,7 +176,7 @@ public class ReservationController {
             redirectAttributes.addFlashAttribute("annul","unsuccess");
             model.addAttribute("annul", "unsuccess");
         }
-        return "redirect:/mesreservations";
+        return REDIRECT_MESRESERVATIONS;
     }
 
     private UserBean recupUser(){

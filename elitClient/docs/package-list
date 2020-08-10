@@ -5,3 +5,4 @@ fr.rbo.elitweb.controller
 fr.rbo.elitweb.exceptions
 fr.rbo.elitweb.proxies
 fr.rbo.elitweb.service
+fr.rbo.elitweb.utils

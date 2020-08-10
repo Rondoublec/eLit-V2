@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
 
-    List<Emprunt> findAllByUserAndEmpruntDateFinIsBeforeAndEmpruntDateProlongationIsNullAndEmpruntDateRetourIsNullOrEmpruntDateProlongationIsNotNullAndEmpruntDateProlongationIsBeforeAndEmpruntDateRetourIsNull(User user, Date dateJour, Date dateJourP);
     List<Emprunt> findAllByUserAndEmpruntDateFinIsBeforeAndEmpruntDateProlongationIsNullAndEmpruntDateRetourIsNull(User user, Date dateJour);
     List<Emprunt> findAllByUserAndEmpruntDateProlongationIsBeforeAndEmpruntDateRetourIsNull(User user, Date dateJour);
     List<Emprunt> findAllByOuvrageAndEmpruntRenduFalse(Ouvrage ouvrage);

@@ -1,10 +1,8 @@
 package fr.rbo.elitapi.controller;
 
 import fr.rbo.elitapi.entity.Bibliotheque;
-import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.exceptions.NotFoundException;
 import fr.rbo.elitapi.repository.BibliothequeRepository;
-import fr.rbo.elitapi.repository.EmpruntRepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

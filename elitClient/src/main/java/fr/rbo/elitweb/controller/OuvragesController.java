@@ -25,6 +25,9 @@ import java.util.List;
 public class OuvragesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OuvragesController.class);
 
+    private static final String REDIRECT_OUVRAGES = "redirect:/ouvrages";
+    private static final String REDIRECT_BIBLIOTHEQUES = "redirect:/bibliotheques";
+
     @Autowired
     APIProxy apiProxy;
     @Autowired
@@ -37,8 +40,8 @@ public class OuvragesController {
         OuvrageBean ouvrageCriteres = new OuvrageBean();
         ouvrageCriteres.setBibliotheque(choixBibliotheque());
         try {
-            if (ouvrageCriteres.getBibliotheque().getBibliothequeId().toString().isEmpty()) { return "redirect:/bibliotheques"; }}
-        catch (Exception e) { return "redirect:/bibliotheques"; }
+            if (ouvrageCriteres.getBibliotheque().getBibliothequeId().toString().isEmpty()) { return REDIRECT_BIBLIOTHEQUES; }}
+        catch (Exception e) { return REDIRECT_BIBLIOTHEQUES; }
         List<OuvrageBean> ouvrages = null;
         try {
             ouvrages = apiProxy.rechercheOuvrage(ouvrageCriteres); }
@@ -56,8 +59,8 @@ public class OuvragesController {
         LOGGER.debug("Post /ouvrages");
         ouvrageCriteres.setBibliotheque(choixBibliotheque());
         try {
-            if (ouvrageCriteres.getBibliotheque().getBibliothequeId().toString().isEmpty()) { return "redirect:/bibliotheques"; }}
-        catch (Exception e) { return "redirect:/bibliotheques"; }
+            if (ouvrageCriteres.getBibliotheque().getBibliothequeId().toString().isEmpty()) { return REDIRECT_BIBLIOTHEQUES; }}
+        catch (Exception e) { return REDIRECT_BIBLIOTHEQUES; }
         List<OuvrageBean> ouvrages = null;
         try {
             ouvrages = apiProxy.rechercheOuvrage(ouvrageCriteres); }
@@ -78,7 +81,7 @@ public class OuvragesController {
         } catch (NotFoundException e) {
             redirectAttributes.addFlashAttribute("status", "notFound");
             model.addAttribute("status", "notFound");
-            return "redirect:/ouvrages";
+            return REDIRECT_OUVRAGES;
         }
         model.addAttribute("ouvrage", ouvrage);
 

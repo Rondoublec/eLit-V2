@@ -1,7 +1,6 @@
-package fr.rbo.elitbatch.ScheduledTask;
+package fr.rbo.elitbatch.scheduledTask;
 
 import fr.rbo.elitbatch.service.NotificationDisponibilite;
-import fr.rbo.elitbatch.service.RelanceRetards;
 import fr.rbo.elitbatch.service.ReservationSurveillance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ public class PlanificationBatchGestionReservations {
 
     // parametre dans le application.properties / toutes les 2 minutes pour les besoins du test
     @Scheduled(cron = "${batch.cron.value}")
-    public void PlanificationBatchReservationEtNotificationCron() {
+    public void planificationBatchReservationEtNotificationCron() {
         LOGGER.info("Lancement du batch de surveillance des réservations");
         System.out.println("DEBUT : Appel du traitement de surveillance des réservations ====================== ");
         reservationSurveillance.gestionDesReservations();

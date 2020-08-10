@@ -35,8 +35,6 @@ public class EmpruntController {
 
     @Value("${emprunt.duree.initiale}")
     private int empruntDureeInitiale;
-    @Value("${emprunt.duree.prolongation}")
-    private int empruntDureeProlongation;
 
     @Autowired
     EmpruntRepository empruntRepository;

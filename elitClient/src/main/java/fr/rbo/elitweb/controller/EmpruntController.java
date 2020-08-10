@@ -26,6 +26,8 @@ import java.util.List;
 public class EmpruntController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmpruntController.class);
 
+    private static final String REDIRECT_MESEMPRUNTS = "redirect:/mesemprunts";
+    
     @Autowired
     APIProxy apiProxy;
 
@@ -93,12 +95,12 @@ public class EmpruntController {
         } catch(NotFoundException e){
             redirectAttributes.addFlashAttribute("status","notFound");
             model.addAttribute("status", "notFound");
-            return "redirect:/mesemprunts";
+            return REDIRECT_MESEMPRUNTS;
         }
         if (!emprunt.getUser().getEmail().equals(recupUser().getEmail())){
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             model.addAttribute("status","notAuthorize");
-            return "redirect:/mesemprunts";
+            return REDIRECT_MESEMPRUNTS;
         }
         model.addAttribute("emprunt", emprunt);
         return "details-emprunt";
@@ -121,12 +123,12 @@ public class EmpruntController {
         } catch(NotFoundException e){
             redirectAttributes.addFlashAttribute("status","notFound");
             model.addAttribute("status", "notFound");
-            return "redirect:/mesemprunts";
+            return REDIRECT_MESEMPRUNTS;
         }
         if (!emprunt.getUser().getEmail().equals(recupUser().getEmail())){
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             model.addAttribute("status","notAuthorize");
-            return "redirect:/mesemprunts";
+            return REDIRECT_MESEMPRUNTS;
         }
         try {
             emprunt = apiProxy.prolongeEmpruntById(empruntId);
@@ -136,7 +138,7 @@ public class EmpruntController {
             redirectAttributes.addFlashAttribute("plus","unsuccess");
             model.addAttribute("plus", "unsuccess");
         }
-        return "redirect:/mesemprunts";
+        return REDIRECT_MESEMPRUNTS;
     }
 
     private UserBean recupUser(){

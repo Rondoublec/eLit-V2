@@ -1,7 +1,7 @@
 package fr.rbo.elitbatch;
 
-import fr.rbo.elitbatch.ScheduledTask.PlanificationBatchGestionReservations;
-import fr.rbo.elitbatch.ScheduledTask.PlanificationBatchRelanceRetards;
+import fr.rbo.elitbatch.scheduledTask.PlanificationBatchGestionReservations;
+import fr.rbo.elitbatch.scheduledTask.PlanificationBatchRelanceRetards;
 import fr.rbo.elitbatch.beans.EmpruntBean;
 import fr.rbo.elitbatch.beans.OuvrageBean;
 import fr.rbo.elitbatch.beans.ReservationBean;
@@ -50,7 +50,7 @@ class ElitBatchApplicationTest {
     }
     // @Test
     public void testPlanificationRelances(){
-        planificationBatchRelanceRetards.PlanificationBatchRelanceRetardsCron();
+        planificationBatchRelanceRetards.planificationBatchRelanceRetardsCron();
     }
     // @Test
     public void testEnvoiMail() {
@@ -79,7 +79,7 @@ class ElitBatchApplicationTest {
     }
     // @Test
     public void testPlanificationNotification(){
-        planificationBatchGestionReservations.PlanificationBatchReservationEtNotificationCron();
+        planificationBatchGestionReservations.planificationBatchReservationEtNotificationCron();
     }
     // @Test
     public void testEnvoiMailNotif() {

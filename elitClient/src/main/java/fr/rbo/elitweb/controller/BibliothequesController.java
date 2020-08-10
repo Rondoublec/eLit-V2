@@ -20,6 +20,8 @@ import java.util.List;
 public class BibliothequesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BibliothequesController.class);
 
+    private static final String REDIRECT_OUVRAGES = "redirect:/ouvrages";
+
     @Autowired
     APIProxy apiProxy;
     @Autowired
@@ -53,7 +55,7 @@ public class BibliothequesController {
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /mabibliotheque : " + bibliothequeId);
         request.getSession().setAttribute("bibliotheque", bibliothequeId);
-        return "redirect:/ouvrages";
+        return REDIRECT_OUVRAGES;
     }
 
 }
