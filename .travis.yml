@@ -19,5 +19,5 @@ before_script:
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-#  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Rondoublec_myerp09 -Dsonar.login=1ad579afa992a0a2494f932549fb215381922f6c -Ptest-integration
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+#  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Rondoublec_eLit-V2 -Dsonar.login=1ad579afa992a0a2494f932549fb215381922f6c -Ptest-integration
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Rondoublec_eLit-V2 -Dsonar.login=edadc0d1c6da223c67323b560a30230a74a57401
