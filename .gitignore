@@ -18,6 +18,9 @@ HELP.md
 *.iml
 *.ipr
 
+### Divers ###
+*.bat
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
