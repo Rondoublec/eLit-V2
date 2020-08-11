@@ -15,7 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,7 +40,7 @@ public class ReservationController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return liste de réservations actives de l'utilisateur connecté
      */
-    @RequestMapping(value="/mesreservations", method = RequestMethod.GET)
+    @GetMapping(path = "/mesreservations")
     public String MesReservations(Model model, HttpSession httpSession
             , final RedirectAttributes redirectAttributes) {
         LOGGER.debug("Get /mesreservations");
@@ -63,7 +64,7 @@ public class ReservationController {
      * @param httpSession Session
      * @return liste de reservations de l'utilisateur connecté correspondants aux critères de recherche
      */
-    @RequestMapping(value="/mesreservations", method = RequestMethod.POST)
+    @PostMapping(path = "/mesreservations")
     public String ReservationsRecherche(Model model, HttpSession httpSession,
                                         @ModelAttribute("reservationCriteres") ReservationBean reservationCriteres) {
         LOGGER.debug("Post /mesreservations");
@@ -78,7 +79,7 @@ public class ReservationController {
         return "recherche-reservations-list";
     }
 
-    @RequestMapping(value="/reservation/demande", method = RequestMethod.POST)
+    @PostMapping(path = "/reservation/demande")
     public String ReservationsDemande(Model model, HttpSession httpSession
             , @RequestParam("ouvrageId") long ouvrageId
             , final RedirectAttributes redirectAttributes){
@@ -112,7 +113,7 @@ public class ReservationController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return la réservation de l'utilisateur et les liste d'attente et date prévues de retrour
      */
-    @RequestMapping(value = "/reservation/details", method = RequestMethod.GET)
+    @GetMapping(path = "/reservation/details")
     public String details(@RequestParam("reservationId") int reservationId, Model model
             , final RedirectAttributes redirectAttributes) {
         LOGGER.debug("Get /reservation/details reservationId : " + reservationId);
@@ -151,7 +152,7 @@ public class ReservationController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return redirection vers la liste des réservations rafraichie
      */
-    @RequestMapping(value = "/reservation/inverseEtat", method = RequestMethod.GET)
+    @GetMapping(path = "/reservation/inverseEtat")
     public String inverse(@RequestParam("reservationId") int reservationId, Model model
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /reservation/inverseEtat reservationId : " + reservationId);

@@ -35,8 +35,7 @@ public class UserAPIService {
                 userACreer.setPassword(user.getPassword());
                 userACreer.setActive(user.isActive());
                 userACreer.setRoles(user.getRoles());
-                UserBean userCree = apiProxy.creerUnUser(userACreer);
-                return  userCree;
+                return apiProxy.creerUnUser(userACreer);
             } catch (RuntimeException ex) {
                 throw new APIException("Post User" ,ex.getMessage(),ex.getStackTrace().toString());
             }
@@ -47,8 +46,7 @@ public class UserAPIService {
     public UserBean recupererUnUserParEmail(String email) {
         LOGGER.debug("recupererUnUserParEmail : " + email);
         try {
-            UserBean user = apiProxy.recupererUnUserParEmail(email);
-            return user;
+            return apiProxy.recupererUnUserParEmail(email);
         } catch (NotFoundException e) {
             return null;
         } catch (RuntimeException e) {
@@ -59,13 +57,11 @@ public class UserAPIService {
     public RoleBean recupererUnRoleParRole(String role) {
         LOGGER.debug("recupererUnRoleParRole : " + role);
         try {
-            RoleBean roleTrouve = apiProxy.roleParRole(role);
-            return roleTrouve;
+            return apiProxy.roleParRole(role);
         } catch (NotFoundException e) {
             return null;
         } catch (RuntimeException e) {
             throw new APIException("Get Role par role" ,e.getMessage(),e.getStackTrace().toString());
-            //TODO logs
         }
     }
 }

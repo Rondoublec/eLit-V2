@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +39,7 @@ public class EmpruntController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return liste de emprunts en cours (non rendus) de l'utilisateur connecté
      */
-    @RequestMapping(value="/mesemprunts", method = RequestMethod.GET)
+    @GetMapping(path = "/mesemprunts")
     public String MesEmprunts(Model model, HttpSession httpSession
             ,final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /mesemprunts");
@@ -62,7 +63,7 @@ public class EmpruntController {
      * @param httpSession Session
      * @return liste de emprunts de l'utilisateur connecté correspondants aux critères de recherche
      */
-    @RequestMapping(value="/mesemprunts", method = RequestMethod.POST)
+    @PostMapping(path = "/mesemprunts")
     public String EmpruntsRecherche (Model model, HttpSession httpSession,
                                      @ModelAttribute("empruntCriteres") EmpruntBean empruntCriteres) {
         LOGGER.debug("Post /mesemprunts");
@@ -85,7 +86,7 @@ public class EmpruntController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return informations détaillées de l'emprunt
      */
-    @RequestMapping(value = "/emprunt/details", method = RequestMethod.GET)
+    @GetMapping(path = "/emprunt/details")
     public String details(@RequestParam("empruntId") int empruntId, Model model
             ,final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /emprunt/details empruntId : " + empruntId);
@@ -113,7 +114,7 @@ public class EmpruntController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return redirection vers la liste des emprunts rafraichie
      */
-    @RequestMapping(value = "/emprunt/plus", method = RequestMethod.GET)
+    @GetMapping(path = "/emprunt/plus")
     public String plus(@RequestParam("empruntId") int empruntId, Model model
             ,final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /emprunt/plus empruntId : " + empruntId);

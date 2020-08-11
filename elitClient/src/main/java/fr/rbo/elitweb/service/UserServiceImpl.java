@@ -61,9 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         for (RoleBean role : userRoles) {
             roles.add(new SimpleGrantedAuthority(role.getRole()));
         }
-
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(roles);
-        return grantedAuthorities;
+        return new ArrayList<GrantedAuthority>(roles);
     }
 
     private UserDetails buildUserForAuthentication(UserBean user, List<GrantedAuthority> authorities) {

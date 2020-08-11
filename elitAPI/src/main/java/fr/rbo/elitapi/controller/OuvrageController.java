@@ -59,9 +59,8 @@ public class OuvrageController {
     @GetMapping(value = "/ouvrage/{id}")
     public Ouvrage recupererUnOuvrage (@PathVariable("id") Long id){
         LOGGER.debug("Get /ouvrage/{id} " + id);
-        Ouvrage ouvrage = ouvrageRepository.findById(id).orElseThrow(() ->
+        return ouvrageRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Cet ouvrage n'existe pas"));
-        return ouvrage;
     }
 
     /**
