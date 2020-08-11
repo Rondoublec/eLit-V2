@@ -23,13 +23,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class ReservationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
+
+    private static final String ERR_RESA_NOT_FOUND = "Reservation inexistante, non trouvée";
 
     @Autowired
     ReservationRepository reservationRepository;
@@ -150,7 +151,7 @@ public class ReservationController {
     public Reservation notififierDisponibiliteOuvrageReserve(@PathVariable("id") Long id){
         LOGGER.debug("Get /reservation/notification/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Reservation inexistante, non trouvée"));
+                new NotFoundException(ERR_RESA_NOT_FOUND));
         if (null != reservation.getReservationDateNotif()) {
             throw new NotAcceptableException("Demande éronnée, notification déjà effectuée");
         }
@@ -185,7 +186,7 @@ public class ReservationController {
     public Reservation switchEtatReservation (@PathVariable("id") Long id){
         LOGGER.debug("Put /reservation/inverseEtat/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Reservation inexistante, non trouvée"));
+                new NotFoundException(ERR_RESA_NOT_FOUND));
         if (reservation.getReservationActive()) {
             reservation.setNotifier(false);
             reservation.setReservationActive(false);
@@ -205,7 +206,7 @@ public class ReservationController {
     public Reservation switchNotifier (@PathVariable("id") Long id){
         LOGGER.debug("Put /reservation/inverseNotifier/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Reservation inexistante, non trouvée"));
+                new NotFoundException(ERR_RESA_NOT_FOUND));
         if (reservation.getNotifier()) {
             reservation.setNotifier(false);
         } else {

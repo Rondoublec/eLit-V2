@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UserController {
@@ -23,7 +22,7 @@ public class UserController {
     @Autowired
     APIProxy apiProxy;
 
-    @RequestMapping(value={"/", "/index"}, method = RequestMethod.GET)
+    @GetMapping(value={"/", "/index"})
     public String index(Model model){
         LOGGER.debug("Get / , /index");
         return "index";

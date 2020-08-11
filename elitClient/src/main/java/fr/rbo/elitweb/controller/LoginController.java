@@ -9,14 +9,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
 @Controller
 public class LoginController {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private static final String REGISTRATION = "registration";
 
     private final UserService userService;
 
@@ -47,7 +48,7 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         UserBean userBean = new UserBean();
         modelAndView.addObject("userBean", userBean);
-        modelAndView.setViewName("registration");
+        modelAndView.setViewName(REGISTRATION);
         return modelAndView;
     }
 
@@ -69,12 +70,12 @@ public class LoginController {
             }
         }
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("registration");
+            modelAndView.setViewName(REGISTRATION);
         } else {
             userService.saveUser(userBean);
             modelAndView.addObject("successMessage", "Le compte a été créé avec succès");
             modelAndView.addObject("userBean", userBean);
-            modelAndView.setViewName("registration");
+            modelAndView.setViewName(REGISTRATION);
         }
         return modelAndView;
     }

@@ -16,9 +16,6 @@ public class EmpruntBean {
     private Boolean empruntRendu;
     private Boolean empruntRelance;
 
-    public EmpruntBean() {
-    }
-
     public long getEmpruntId() {
         return empruntId;
     }

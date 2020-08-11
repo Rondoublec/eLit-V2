@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,7 +34,7 @@ public class OuvragesController {
     HttpServletRequest request;
 
     @GetMapping(path = "/ouvrages")
-    public String Ouvrages(Model model, HttpSession httpSession
+    public String ouvrages(Model model, HttpSession httpSession
             , final RedirectAttributes redirectAttributes) {
         LOGGER.debug("Get /ouvrages");
         OuvrageBean ouvrageCriteres = new OuvrageBean();
@@ -54,7 +53,7 @@ public class OuvragesController {
     }
 
     @PostMapping(path = "/ouvrages")
-    public String OuvragesRecherche(Model model,
+    public String ouvragesRecherche(Model model,
                                     @ModelAttribute("ouvrageCriteres") OuvrageBean ouvrageCriteres,
                                     HttpSession httpSession) {
         LOGGER.debug("Post /ouvrages");

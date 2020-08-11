@@ -17,6 +17,8 @@ import java.util.List;
 public class ReservationRepositoryImpl implements ReservationRepositoryInterface {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationRepositoryImpl.class);
 
+    private static final String RESERVATION_ACTIVE = "reservationActive";
+
     final EntityManager em;
     public ReservationRepositoryImpl(EntityManager em) {
         this.em = em;
@@ -48,18 +50,18 @@ public class ReservationRepositoryImpl implements ReservationRepositoryInterface
 
         try {
             if (!reservationCherche.getReservationActive().toString().isEmpty()) {
-                predicates.add(cb.equal(reservation.get("reservationActive"), reservationCherche.getReservationActive()));
+                predicates.add(cb.equal(reservation.get(RESERVATION_ACTIVE), reservationCherche.getReservationActive()));
             }
         } catch (NullPointerException e) {}
 
         try {
             if (action.equals("active")){
-                predicates.add(cb.isTrue(reservation.get("reservationActive")));
+                predicates.add(cb.isTrue(reservation.get(RESERVATION_ACTIVE)));
             }
         } catch (NullPointerException e) {}
         try {
             if (action.equals("close")){
-                predicates.add(cb.isFalse(reservation.get("reservationActive")));
+                predicates.add(cb.isFalse(reservation.get(RESERVATION_ACTIVE)));
             }
         } catch (NullPointerException e) {}
         try {

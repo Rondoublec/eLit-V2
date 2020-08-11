@@ -1,6 +1,5 @@
 package fr.rbo.elitapi.repository;
 
-import fr.rbo.elitapi.entity.Emprunt;
 import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;

@@ -8,6 +8,7 @@ import fr.rbo.elitweb.exceptions.ConflictException;
 import fr.rbo.elitweb.exceptions.NotAcceptableException;
 import fr.rbo.elitweb.exceptions.NotFoundException;
 import fr.rbo.elitweb.proxies.APIProxy;
+import fr.rbo.elitweb.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +29,8 @@ public class ReservationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     private static final String REDIRECT_MESRESERVATIONS = "redirect:/mesreservations";
+    private static final String RESA = "resa";
+    private static final String ANNUL = "annul";
 
     @Autowired
     APIProxy apiProxy;
@@ -41,7 +43,7 @@ public class ReservationController {
      * @return liste de réservations actives de l'utilisateur connecté
      */
     @GetMapping(path = "/mesreservations")
-    public String MesReservations(Model model, HttpSession httpSession
+    public String mesReservations(Model model, HttpSession httpSession
             , final RedirectAttributes redirectAttributes) {
         LOGGER.debug("Get /mesreservations");
         ReservationBean reservationCriteres = new ReservationBean();
@@ -65,7 +67,7 @@ public class ReservationController {
      * @return liste de reservations de l'utilisateur connecté correspondants aux critères de recherche
      */
     @PostMapping(path = "/mesreservations")
-    public String ReservationsRecherche(Model model, HttpSession httpSession,
+    public String reservationsRecherche(Model model, HttpSession httpSession,
                                         @ModelAttribute("reservationCriteres") ReservationBean reservationCriteres) {
         LOGGER.debug("Post /mesreservations");
         reservationCriteres.setUser(recupUser());
@@ -80,7 +82,7 @@ public class ReservationController {
     }
 
     @PostMapping(path = "/reservation/demande")
-    public String ReservationsDemande(Model model, HttpSession httpSession
+    public String reservationsDemande(Model model, HttpSession httpSession
             , @RequestParam("ouvrageId") long ouvrageId
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Post /reservation/demande ouvrageId : " + ouvrageId);
@@ -92,13 +94,13 @@ public class ReservationController {
 
         try {
             apiProxy.creerReservation(reservation);
-            redirectAttributes.addFlashAttribute("resa", "success");
+            redirectAttributes.addFlashAttribute(RESA, Constants.SUCCESS);
         } catch (NotAcceptableException e) {
-            redirectAttributes.addFlashAttribute("resa", "unsuccess001");
+            redirectAttributes.addFlashAttribute(RESA, "unsuccess001");
         } catch (ConflictException e) {
-            redirectAttributes.addFlashAttribute("resa", "unsuccess002");
+            redirectAttributes.addFlashAttribute(RESA, "unsuccess002");
         } catch (NotFoundException e) {
-            redirectAttributes.addFlashAttribute("resa", "unsuccess404");
+            redirectAttributes.addFlashAttribute(RESA, "unsuccess404");
         }
 
         return REDIRECT_MESRESERVATIONS;
@@ -121,8 +123,8 @@ public class ReservationController {
         try {
             reservation = apiProxy.findReservationById(reservationId);
         } catch (NotFoundException e) {
-            redirectAttributes.addFlashAttribute("status", "notFound");
-            model.addAttribute("status", "notFound");
+            redirectAttributes.addFlashAttribute(Constants.STATUS, Constants.NOT_FOUND);
+            model.addAttribute(Constants.STATUS, Constants.NOT_FOUND);
             return REDIRECT_MESRESERVATIONS;
         }
         model.addAttribute("reservation", reservation);
@@ -160,22 +162,22 @@ public class ReservationController {
         try {
             reservation = apiProxy.findReservationById(reservationId);
         } catch(NotFoundException e){
-            redirectAttributes.addFlashAttribute("status","notFound");
-            model.addAttribute("status", "notFound");
+            redirectAttributes.addFlashAttribute(Constants.STATUS,Constants.NOT_FOUND);
+            model.addAttribute(Constants.STATUS, Constants.NOT_FOUND);
             return REDIRECT_MESRESERVATIONS;
         }
         if (!reservation.getUser().getEmail().equals(recupUser().getEmail())){
-            redirectAttributes.addFlashAttribute("status","notAuthorize");
-            model.addAttribute("status","notAuthorize");
+            redirectAttributes.addFlashAttribute(Constants.STATUS,Constants.NOT_AUTHORIZE);
+            model.addAttribute(Constants.STATUS,Constants.NOT_AUTHORIZE);
             return REDIRECT_MESRESERVATIONS;
         }
         try {
             reservation = apiProxy.switchEtatReservation(reservationId);
-            redirectAttributes.addFlashAttribute("annul","success");
-            model.addAttribute("annul", "success");
+            redirectAttributes.addFlashAttribute(ANNUL,Constants.SUCCESS);
+            model.addAttribute(ANNUL, Constants.SUCCESS);
         } catch(NotAcceptableException e){
-            redirectAttributes.addFlashAttribute("annul","unsuccess");
-            model.addAttribute("annul", "unsuccess");
+            redirectAttributes.addFlashAttribute(ANNUL,Constants.UNSUCCESS);
+            model.addAttribute(ANNUL, Constants.UNSUCCESS);
         }
         return REDIRECT_MESRESERVATIONS;
     }

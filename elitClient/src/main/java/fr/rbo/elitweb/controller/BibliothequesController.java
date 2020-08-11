@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,7 +49,7 @@ public class BibliothequesController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return redirection vers ouvrages
      */
-    @GetMapping(path = "/mabibliotheques")
+    @GetMapping(path = "/mabibliotheque")
     public String details(@RequestParam("bibliothequeId") int bibliothequeId, Model model
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /mabibliotheque : " + bibliothequeId);
