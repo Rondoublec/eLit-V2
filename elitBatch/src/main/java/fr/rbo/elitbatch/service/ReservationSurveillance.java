@@ -26,7 +26,7 @@ public class ReservationSurveillance {
     public void gestionDesReservations() {
         LOGGER.info("Début du traitement : gestionDesReservations");
         Date date = new Date();
-        System.out.println("Passage du batch de surveillance desréservations - " + date.toString());
+        LOGGER.info("Passage du batch de surveillance desréservations - " + date.toString());
         // remonter toutes les demandes de réservations actives & notifiées
         List<ReservationBean> reservations = null;
         try {
@@ -36,20 +36,20 @@ public class ReservationSurveillance {
         long intervalle = 0;
         if (reservations != null){
             for (ReservationBean reservation : reservations)  {
-                System.out.println( "reservation : " + reservation.getReservationId() + " date de notifications : " + reservation.getReservationDateNotif());
+                LOGGER.info( "reservation : " + reservation.getReservationId() + " date de notifications : " + reservation.getReservationDateNotif());
                 intervalle = date.getTime() - reservation.getReservationDateNotif().getTime();
-                System.out.println( "Délais                           : " + TimeUnit.HOURS.convert(intervalle, TimeUnit.MILLISECONDS));
+                LOGGER.info( "Délais                           : " + TimeUnit.HOURS.convert(intervalle, TimeUnit.MILLISECONDS));
                 // si la notification de la réservation a plus de xx heures (variable duree.delaisAttente)
                 if ((TimeUnit.HOURS.convert(intervalle, TimeUnit.MILLISECONDS) >= delaisAttente )) {
                     try {
-                        System.out.println( "Fermer la demande de réservation : " + reservation.getReservationId());
+                        LOGGER.info( "Fermer la demande de réservation : " + reservation.getReservationId());
                         apiProxy.switchEtatReservationById(reservation.getReservationId());
-                        System.out.println( "Fermer la demande de réservation : FAIT");
+                        LOGGER.info( "Fermer la demande de réservation : FAIT");
                     } catch(NotFoundException e){}
                     try {
-                        System.out.println( "Flaguer [à notifier] la réservation suivante pour l'ouvrage : " + reservation.getOuvrage().getOuvrageId());
+                        LOGGER.info( "Flaguer [à notifier] la réservation suivante pour l'ouvrage : " + reservation.getOuvrage().getOuvrageId());
                         apiProxy.majReservationaNotifierById(reservation.getOuvrage().getOuvrageId());
-                        System.out.println( "Flaguer [à notifier] la réservation suivante pour l'ouvrage : FAIT");
+                        LOGGER.info( "Flaguer [à notifier] la réservation suivante pour l'ouvrage : FAIT");
                     } catch(NotFoundException e){}
                 }
             }

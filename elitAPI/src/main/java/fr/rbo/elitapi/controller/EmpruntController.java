@@ -132,7 +132,7 @@ public class EmpruntController {
         User user = userRepository.findById(emprunt.getUser().getId()).orElseThrow(() ->
                 new NotFoundException("Utilisateur inconnu"));
 
-        if (!isEmpruntable(ouvrage, user)) {
+        if (Boolean.FALSE.equals(isEmpruntable(ouvrage, user))) {
             throw new NotAcceptableException("Emprunt impossible, ouvrage réservé non disponible");
         }
 

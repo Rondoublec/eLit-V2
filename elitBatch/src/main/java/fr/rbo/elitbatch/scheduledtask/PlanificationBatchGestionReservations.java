@@ -1,4 +1,4 @@
-package fr.rbo.elitbatch.scheduledTask;
+package fr.rbo.elitbatch.scheduledtask;
 
 import fr.rbo.elitbatch.service.NotificationDisponibilite;
 import fr.rbo.elitbatch.service.ReservationSurveillance;
@@ -21,14 +21,14 @@ public class PlanificationBatchGestionReservations {
     @Scheduled(cron = "${batch.cron.value}")
     public void planificationBatchReservationEtNotificationCron() {
         LOGGER.info("Lancement du batch de surveillance des réservations");
-        System.out.println("DEBUT : Appel du traitement de surveillance des réservations ====================== ");
+        LOGGER.info("DEBUT : Appel du traitement de surveillance des réservations ====================== ");
         reservationSurveillance.gestionDesReservations();
-        System.out.println(" FIN  : Appel du traitement de surveillance des réservations ====================== ");
+        LOGGER.info(" FIN  : Appel du traitement de surveillance des réservations ====================== ");
 
         LOGGER.info("Lancement du batch d'envoi des notifications");
-        System.out.println("DEBUT : Appel du traitement des envois de mail de notification de disponibilité === ");
+        LOGGER.info("DEBUT : Appel du traitement des envois de mail de notification de disponibilité === ");
         notificationDisponibilite.mailsDeNotifications();
-        System.out.println(" FIN  : Appel du traitement des envois de mail de notification de disponibilité === ");
+        LOGGER.info(" FIN  : Appel du traitement des envois de mail de notification de disponibilité === ");
 
     }
 

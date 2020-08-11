@@ -27,7 +27,7 @@ public class NotificationDisponibilite {
     public void mailsDeNotifications() {
         LOGGER.info("Début du traitement : mailsDeNotifications");
         Date date = new Date();
-        System.out.println("Passage du batch d'envoi des mails de notifications de disponibilites - " + date.toString());
+        LOGGER.info("Passage du batch d'envoi des mails de notifications de disponibilites - " + date.toString());
         List<ReservationBean> reservations = null;
         try {
             reservations = apiProxy.listeDesReservationsaNotifier();
@@ -35,7 +35,7 @@ public class NotificationDisponibilite {
 
         if (reservations != null){
             for (ReservationBean reservation : reservations)  {
-                System.out.println( "reservation : " + reservation.getReservationId() + " user : " + reservation.getUser().getEmail());
+                LOGGER.info( "reservation : " + reservation.getReservationId() + " user : " + reservation.getUser().getEmail());
                 try {
                     emailService.envoiEmailNotification(reservation);
                     apiProxy.majDateNotificationById(reservation.getReservationId());

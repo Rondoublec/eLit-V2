@@ -42,9 +42,8 @@ public class UserController {
     @GetMapping(value = "/user/{id}")
     public User recupererUser (@PathVariable("id") Long id){
         LOGGER.debug("Get /user/{id} " + id);
-        User user = userRepository.findById(id).orElseThrow(() ->
+        return userRepository.findById(id).orElseThrow(() ->
                         new NotFoundException("Utilisateur inexistant"));
-        return user;
     }
 
     /**
@@ -72,8 +71,7 @@ public class UserController {
         User newUser = userRepository.findById(user.getId()).orElse(new User());
         majUser(user, newUser);
         userRepository.save(newUser);
-        user = newUser;
-        return user;
+        return newUser;
     }
 
     private void majUser(User userSource, User userCible) {

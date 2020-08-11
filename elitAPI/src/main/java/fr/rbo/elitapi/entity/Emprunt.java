@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 public class Emprunt{
-    private static final Logger log = LoggerFactory.getLogger(Emprunt.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Emprunt.class);
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)

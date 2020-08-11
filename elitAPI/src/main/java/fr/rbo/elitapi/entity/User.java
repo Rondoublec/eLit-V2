@@ -20,7 +20,7 @@ import org.springframework.data.annotation.Transient;
 @Entity
 @Table(name = "utilisateur")
 public class User {
-	private static final Logger log = LoggerFactory.getLogger(User.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(User.class);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

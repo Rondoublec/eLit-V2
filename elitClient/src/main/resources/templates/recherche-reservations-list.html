@@ -127,7 +127,7 @@
                         <td th:text="${#dates.format(reservation.reservationDateNotif, 'dd-MM-yyyy')}"></td>
                         <td>
                             <span th:if="${reservation.reservationActive} == false">
-                                <div th:text="${reservation.reservationActive}"></div>
+                                <div>Demande close</div>
                             </span>
                             <span th:if="${reservation.reservationActive} == true">
                                 <div class="btn btn-outline-primary">

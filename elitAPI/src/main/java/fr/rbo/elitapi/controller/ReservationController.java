@@ -187,7 +187,7 @@ public class ReservationController {
         LOGGER.debug("Put /reservation/inverseEtat/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ERR_RESA_NOT_FOUND));
-        if (reservation.getReservationActive()) {
+        if (Boolean.TRUE.equals(reservation.getReservationActive())) {
             reservation.setNotifier(false);
             reservation.setReservationActive(false);
         } else {
@@ -207,7 +207,7 @@ public class ReservationController {
         LOGGER.debug("Put /reservation/inverseNotifier/{" + id + "}");
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ERR_RESA_NOT_FOUND));
-        if (reservation.getNotifier()) {
+        if (Boolean.TRUE.equals(reservation.getNotifier())) {
             reservation.setNotifier(false);
         } else {
             reservation.setNotifier(true);

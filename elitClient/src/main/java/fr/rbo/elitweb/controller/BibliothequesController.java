@@ -34,7 +34,7 @@ public class BibliothequesController {
      * @return liste des bibliothèques
      */
     @GetMapping(path = "/bibliotheques")
-    public String Ouvrages(Model model, HttpSession httpSession
+    public String ouvrages(Model model, HttpSession httpSession
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /bibliotheques");
         List<BibliothequeBean> bibliotheques = apiProxy.findAllBibliotheques();

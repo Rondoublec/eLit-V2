@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Entity
 public class Reservation {
-    private static final Logger log = LoggerFactory.getLogger(Reservation.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Reservation.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

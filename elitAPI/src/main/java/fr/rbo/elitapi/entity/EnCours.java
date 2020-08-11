@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class EnCours {
 
-    private static final Logger log = LoggerFactory.getLogger(EnCours.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnCours.class);
 
     private Long ouvrageId;
     private int nbEncours;

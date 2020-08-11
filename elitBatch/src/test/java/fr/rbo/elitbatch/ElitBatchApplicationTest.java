@@ -1,7 +1,7 @@
 package fr.rbo.elitbatch;
 
-import fr.rbo.elitbatch.scheduledTask.PlanificationBatchGestionReservations;
-import fr.rbo.elitbatch.scheduledTask.PlanificationBatchRelanceRetards;
+import fr.rbo.elitbatch.scheduledtask.PlanificationBatchGestionReservations;
+import fr.rbo.elitbatch.scheduledtask.PlanificationBatchRelanceRetards;
 import fr.rbo.elitbatch.beans.EmpruntBean;
 import fr.rbo.elitbatch.beans.OuvrageBean;
 import fr.rbo.elitbatch.beans.ReservationBean;

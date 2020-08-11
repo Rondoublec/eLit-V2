@@ -35,10 +35,10 @@ public class RelanceRetards {
     public void mailsDeRelances() {
         LOGGER.info("Début du traitement : mailsDeRelances");
         Date date = new Date();
-        System.out.println("Passage du batch d'envoi des mails de relances - " + date.toString());
+        LOGGER.info("Passage du batch d'envoi des mails de relances - " + date.toString());
         List<UserBean> listeUser = clientService.listeUser();
         for (UserBean user : listeUser)  {
-        System.out.println( "user : " + user.getId());
+        LOGGER.info( "user : " + user.getId());
             List<EmpruntBean> emprunts = null;
             try {
                 emprunts = apiProxy.listeDesEmpruntsEnRetard(user.getId());

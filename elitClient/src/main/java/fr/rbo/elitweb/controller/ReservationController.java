@@ -172,7 +172,7 @@ public class ReservationController {
             return REDIRECT_MESRESERVATIONS;
         }
         try {
-            reservation = apiProxy.switchEtatReservation(reservationId);
+            apiProxy.switchEtatReservation(reservationId);
             redirectAttributes.addFlashAttribute(ANNUL,Constants.SUCCESS);
             model.addAttribute(ANNUL, Constants.SUCCESS);
         } catch(NotAcceptableException e){

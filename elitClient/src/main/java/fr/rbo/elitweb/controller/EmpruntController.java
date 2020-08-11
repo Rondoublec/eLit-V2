@@ -134,7 +134,7 @@ public class EmpruntController {
             return REDIRECT_MESEMPRUNTS;
         }
         try {
-            emprunt = apiProxy.prolongeEmpruntById(empruntId);
+            apiProxy.prolongeEmpruntById(empruntId);
             redirectAttributes.addFlashAttribute(PLUS, Constants.SUCCESS);
             model.addAttribute(PLUS, Constants.SUCCESS);
         } catch(NotAcceptableException e){
