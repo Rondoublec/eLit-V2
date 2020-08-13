@@ -8,13 +8,14 @@ import fr.rbo.elitapi.exceptions.ConflictException;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import fr.rbo.elitapi.exceptions.NotFoundException;
 import fr.rbo.elitapi.repository.EmpruntRepository;
+import fr.rbo.elitapi.repository.OuvrageRepository;
 import fr.rbo.elitapi.repository.ReservationRepository;
 import fr.rbo.elitapi.repository.ReservationRepositoryInterface;
-import fr.rbo.elitapi.repository.OuvrageRepository;
 import fr.rbo.elitapi.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,9 @@ public class ReservationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     private static final String ERR_RESA_NOT_FOUND = "Reservation inexistante, non trouvée";
+
+    @Value("${reservation.coef.nbmax.par.ouvrage}")
+    private int coefNbMaxParOuvrage;
 
     @Autowired
     ReservationRepository reservationRepository;
@@ -249,10 +253,10 @@ public class ReservationController {
         // RG001 : Si la liste des réservation en cours est > à 2 fois le stock, on ne peut pas ajouter une réservation supplémentaire
         List<Emprunt> emprunts = empruntRepository.findAllByOuvrageAndEmpruntRenduFalse(ouvrage);
         LOGGER.debug("/reservation/ajout -> emprunts en cours    :" + emprunts.size());
-        int maxReservation = (Integer.parseInt(ouvrage.getOuvrageQuantite()) + emprunts.size()) * 2;
+        int maxReservation = (Integer.parseInt(ouvrage.getOuvrageQuantite()) + emprunts.size()) * coefNbMaxParOuvrage;
         LOGGER.debug("/reservation/ajout -> maxReservation       : " + maxReservation);
         List<Reservation> reservations = reservationRepository.findAllByOuvrageAndReservationActiveTrue(ouvrage);
-        int nbReservationEnAttente  = reservations.size();
+        int nbReservationEnAttente = reservations.size();
         LOGGER.debug("/reservation/ajout -> reservations actives : " + nbReservationEnAttente);
         if (nbReservationEnAttente >= maxReservation) {
             LOGGER.debug("RG001 : Réservation impossible, quotat de réservation en attente atteint ou rupture définitive ! " + nbReservationEnAttente);

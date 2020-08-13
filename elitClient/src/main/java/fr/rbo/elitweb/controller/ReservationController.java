@@ -130,8 +130,10 @@ public class ReservationController {
         model.addAttribute("reservation", reservation);
 
         List<ReservationBean> reservationsOuvrage = null;
+        try {
         reservationsOuvrage =
                 apiProxy.listeDesReservationsDeLOuvrage((int) (long) reservation.getOuvrage().getOuvrageId());
+        } catch(NotFoundException e){}
         model.addAttribute("reservationsOuvrage", reservationsOuvrage);
         model.addAttribute("moi", recupUser().getEmail());
 

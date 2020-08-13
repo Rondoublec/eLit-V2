@@ -1,0 +1,414 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
+
+-- Started on 2020-08-12 16:47:52
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 197 (class 1259 OID 72918)
+-- Name: bibliotheque; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.bibliotheque (
+    bibliotheque_id bigint NOT NULL,
+    bibliotheque_adresse character varying(255),
+    bibliotheque_email character varying(255),
+    bibliotheque_horaires character varying(255),
+    bibliotheque_nom character varying(255),
+    bibliotheque_telephone character varying(255)
+);
+
+
+ALTER TABLE public.bibliotheque OWNER TO usr_elit;
+
+--
+-- TOC entry 198 (class 1259 OID 72926)
+-- Name: emprunt; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.emprunt (
+    emprunt_id bigint NOT NULL,
+    emprunt_date_debut timestamp without time zone,
+    emprunt_date_fin timestamp without time zone,
+    emprunt_date_prolongation timestamp without time zone,
+    emprunt_date_relance timestamp without time zone,
+    emprunt_date_retour timestamp without time zone,
+    emprunt_prolongation boolean,
+    emprunt_relance boolean,
+    emprunt_rendu boolean,
+    ouvrage_ouvrage_id bigint,
+    user_id bigint
+);
+
+
+ALTER TABLE public.emprunt OWNER TO usr_elit;
+
+--
+-- TOC entry 196 (class 1259 OID 72916)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: usr_elit
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO usr_elit;
+
+--
+-- TOC entry 199 (class 1259 OID 72931)
+-- Name: ouvrage; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.ouvrage (
+    ouvrage_id bigint NOT NULL,
+    ouvrage_auteur character varying(255),
+    ouvrage_lien_image character varying(255),
+    ouvrage_localisation character varying(255),
+    ouvrage_quantite character varying(255),
+    ouvrage_reference character varying(255),
+    ouvrage_resume character varying(255),
+    ouvrage_style character varying(255),
+    ouvrage_titre character varying(255),
+    bibliotheque_bibliotheque_id bigint
+);
+
+
+ALTER TABLE public.ouvrage OWNER TO usr_elit;
+
+--
+-- TOC entry 200 (class 1259 OID 72939)
+-- Name: reservation; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.reservation (
+    reservation_id bigint NOT NULL,
+    notifier boolean NOT NULL,
+    reservation_active boolean NOT NULL,
+    reservation_date_demande timestamp without time zone,
+    reservation_date_notif timestamp without time zone,
+    ouvrage_ouvrage_id bigint,
+    user_id bigint
+);
+
+
+ALTER TABLE public.reservation OWNER TO usr_elit;
+
+--
+-- TOC entry 201 (class 1259 OID 72944)
+-- Name: role; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.role (
+    role_id integer NOT NULL,
+    role character varying(255)
+);
+
+
+ALTER TABLE public.role OWNER TO usr_elit;
+
+--
+-- TOC entry 202 (class 1259 OID 72949)
+-- Name: utilisateur; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.utilisateur (
+    id bigint NOT NULL,
+    active boolean NOT NULL,
+    email character varying(255),
+    last_name character varying(255),
+    name character varying(255),
+    password character varying(255)
+);
+
+
+ALTER TABLE public.utilisateur OWNER TO usr_elit;
+
+--
+-- TOC entry 203 (class 1259 OID 72957)
+-- Name: utilisateur_roles; Type: TABLE; Schema: public; Owner: usr_elit
+--
+
+CREATE TABLE public.utilisateur_roles (
+    user_id bigint NOT NULL,
+    roles_role_id integer NOT NULL
+);
+
+
+ALTER TABLE public.utilisateur_roles OWNER TO usr_elit;
+
+--
+-- TOC entry 2855 (class 0 OID 72918)
+-- Dependencies: 197
+-- Data for Name: bibliotheque; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.bibliotheque (bibliotheque_id, bibliotheque_adresse, bibliotheque_email, bibliotheque_horaires, bibliotheque_nom, bibliotheque_telephone) FROM stdin;
+700	15 rue des lombards 30000 Nimes	lc@nm.fr	Lun.Ven. 10-12H 14-18H; Sam. 9-17H	La corderie	04.66.84.02.83
+701	1 place de la revolution 30000 Nimes	no@nm.fr	Mar.Ven. 10-12H 14-18H; Sam. 10-12 13-16H	Nimes ouest	04.66.84.00.78
+702	8 rue Paul Painlevé 30000 Nimes	ns@nm.fr	Mar.Ven. 10-12H 14-18H; Mer. 13-19H, Sam. 9-17H	Nimes sud	04.66.67.69.83
+\.
+
+
+--
+-- TOC entry 2856 (class 0 OID 72926)
+-- Dependencies: 198
+-- Data for Name: emprunt; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.emprunt (emprunt_id, emprunt_date_debut, emprunt_date_fin, emprunt_date_prolongation, emprunt_date_relance, emprunt_date_retour, emprunt_prolongation, emprunt_relance, emprunt_rendu, ouvrage_ouvrage_id, user_id) FROM stdin;
+9200	2020-08-01 14:00:00	2020-08-28 14:00:00	\N	\N	\N	f	f	f	3000	100
+9300	2020-07-20 14:00:00	2020-08-18 14:00:00	2020-07-14 14:00:00	\N	\N	t	f	f	3000	600
+9400	2020-07-30 14:00:00	2020-08-25 14:00:00	\N	\N	\N	f	f	f	3000	300
+6000	2020-07-02 14:00:00	2020-08-01 14:00:00	\N	\N	\N	f	f	f	2000	200
+7000	2020-07-02 14:00:00	2020-08-01 14:00:00	\N	\N	2020-07-29 14:00:00	f	f	t	3000	601
+8000	2020-07-02 14:00:00	2020-08-01 14:00:00	2020-08-29 14:00:00	\N	\N	t	f	f	4000	601
+9000	2020-07-02 14:00:00	2020-08-01 14:00:00	\N	\N	\N	f	f	f	5000	601
+9100	2020-07-05 14:00:00	2020-07-31 14:00:00	\N	\N	\N	f	f	f	1000	601
+9150	2020-07-09 14:00:00	2020-08-06 14:00:00	\N	\N	\N	f	f	f	5500	200
+\.
+
+
+--
+-- TOC entry 2857 (class 0 OID 72931)
+-- Dependencies: 199
+-- Data for Name: ouvrage; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.ouvrage (ouvrage_id, ouvrage_auteur, ouvrage_lien_image, ouvrage_localisation, ouvrage_quantite, ouvrage_reference, ouvrage_resume, ouvrage_style, ouvrage_titre, bibliotheque_bibliotheque_id) FROM stdin;
+1000	Auteur 1000	../images/guy.jpg	Etage 1000 Casier 1000	0	REF1000	C'est l'histoire d'un mec ...	Comique	The story of a guy	700
+2000	Auteur 2000	../images/guy2.jpg	Etage 2000 Casier 2000	2	REF2000	C'est l'histoire de 2 mecs ...	Amour	The story of a guy 2	700
+3000	Auteur 3000	../images/guy3.jpg	Etage 3000 Casier 3000	0	REF3000	C'est l'histoire de 3 mecs ...	Thriller	The story of a guy 3	700
+4000	Auteur 4000	../images/guy4.jpg	Etage 4000 Casier 4000	4	REF4000	C'est l'histoire de 4 mecs ...	Amour	The story of a guy 4	700
+5000	Auteur 5000	../images/guy5.jpg	Etage 5000 Casier 5000	0	REF5000	C'est l'histoire de 5 mecs ...	Science-fiction	The story of a guy 5	700
+5500	Auteur 5500	../images/guy6.jpg	Etage 5500 Casier 5500	0	REF5500	C'est l'histoire de 6 mecs ...	Fantastique	The story of a guy 6	701
+5600	Auteur 5600	../images/guy7.jpg	Etage 5600 Casier 5600	0	REF5600	C'est l'histoire de 7 mecs ...	BD	The story of a guy 7	702
+\.
+
+
+--
+-- TOC entry 2858 (class 0 OID 72939)
+-- Dependencies: 200
+-- Data for Name: reservation; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.reservation (reservation_id, notifier, reservation_active, reservation_date_demande, reservation_date_notif, ouvrage_ouvrage_id, user_id) FROM stdin;
+9501	f	f	2020-08-01 12:00:00	\N	4000	601
+9502	f	f	2020-08-02 12:00:00	\N	5000	601
+9503	f	t	2020-07-13 12:00:00	\N	1000	200
+9510	f	t	2020-07-26 12:00:00	\N	3000	200
+9520	f	t	2020-07-30 12:00:00	\N	3000	400
+9530	f	t	2020-07-22 12:00:00	\N	3000	500
+9540	f	t	2020-07-25 12:00:00	\N	5500	601
+9560	f	t	2020-07-29 12:00:00	\N	3000	601
+\.
+
+
+--
+-- TOC entry 2859 (class 0 OID 72944)
+-- Dependencies: 201
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.role (role_id, role) FROM stdin;
+101	ADMIN
+201	USER
+301	PERSONNEL
+\.
+
+
+--
+-- TOC entry 2860 (class 0 OID 72949)
+-- Dependencies: 202
+-- Data for Name: utilisateur; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.utilisateur (id, active, email, last_name, name, password) FROM stdin;
+100	t	alain@a.a	Admin	Alain	$2a$10$XAOiM6rLRrzMfF4jNsQc7O8jurI4BORxgh6cEGV0k9gymUfjYZx9a
+200	t	ursula@a.a	User	Ursula	$2a$10$2rCrmX.jiEAF1cLdDJduBOAj2qiim6bu9mKF86I3YvrHwNJqvijYW
+300	t	maurice@a.a	Membre	Maurice	$2a$10$jUmvMaNIcH6xE3M8TRp6suTYNmBR08/SBXQ.7iiyTZCa3IWG1o0q6
+400	t	u2@a.a	User2	Ulrich	$2a$10$r5LYG4bcXnFQfXSUFXWLIu8rzSqdOfHPD/SZ9/jJj6aZSXjpAtAsu
+500	t	u3@a.a	User3	Urbain	$2a$10$KicK13YZIjKkmptOwXACg.85TD6d8zcfxN2WcgEWbku5asdgfdvcu
+600	t	m1@a.a	Membre1	Manu	$2a$10$6HdfSXRm2fhvLc6BJQEmPunFIc6hWY94X9/DLQUaHNvc5AAyq/vLO
+601	t	a@a.a	Le Petit	Robert	$2a$10$q0emfCrFlqeFfbsNWGlLaeHdqwCGBUV9CzBm3qdvXyZdCPDFFkdn.
+\.
+
+
+--
+-- TOC entry 2861 (class 0 OID 72957)
+-- Dependencies: 203
+-- Data for Name: utilisateur_roles; Type: TABLE DATA; Schema: public; Owner: usr_elit
+--
+
+COPY public.utilisateur_roles (user_id, roles_role_id) FROM stdin;
+100	101
+200	201
+300	301
+400	201
+500	201
+600	301
+601	201
+\.
+
+
+--
+-- TOC entry 2867 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: usr_elit
+--
+
+SELECT pg_catalog.setval('public.hibernate_sequence', 1, false);
+
+
+--
+-- TOC entry 2713 (class 2606 OID 72925)
+-- Name: bibliotheque bibliotheque_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.bibliotheque
+    ADD CONSTRAINT bibliotheque_pkey PRIMARY KEY (bibliotheque_id);
+
+
+--
+-- TOC entry 2715 (class 2606 OID 72930)
+-- Name: emprunt emprunt_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.emprunt
+    ADD CONSTRAINT emprunt_pkey PRIMARY KEY (emprunt_id);
+
+
+--
+-- TOC entry 2717 (class 2606 OID 72938)
+-- Name: ouvrage ouvrage_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.ouvrage
+    ADD CONSTRAINT ouvrage_pkey PRIMARY KEY (ouvrage_id);
+
+
+--
+-- TOC entry 2719 (class 2606 OID 72943)
+-- Name: reservation reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.reservation
+    ADD CONSTRAINT reservation_pkey PRIMARY KEY (reservation_id);
+
+
+--
+-- TOC entry 2721 (class 2606 OID 72948)
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_pkey PRIMARY KEY (role_id);
+
+
+--
+-- TOC entry 2723 (class 2606 OID 72956)
+-- Name: utilisateur utilisateur_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.utilisateur
+    ADD CONSTRAINT utilisateur_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2725 (class 2606 OID 72961)
+-- Name: utilisateur_roles utilisateur_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.utilisateur_roles
+    ADD CONSTRAINT utilisateur_roles_pkey PRIMARY KEY (user_id, roles_role_id);
+
+
+--
+-- TOC entry 2727 (class 2606 OID 72967)
+-- Name: emprunt fk12tbo3t2w0x3jl8t4ukf4v1xn; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.emprunt
+    ADD CONSTRAINT fk12tbo3t2w0x3jl8t4ukf4v1xn FOREIGN KEY (user_id) REFERENCES public.utilisateur(id);
+
+
+--
+-- TOC entry 2731 (class 2606 OID 72987)
+-- Name: utilisateur_roles fk67l6u21iiy0v85ahvdpaq1hyg; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.utilisateur_roles
+    ADD CONSTRAINT fk67l6u21iiy0v85ahvdpaq1hyg FOREIGN KEY (roles_role_id) REFERENCES public.role(role_id);
+
+
+--
+-- TOC entry 2729 (class 2606 OID 72977)
+-- Name: reservation fk6mj44ald890jb8g64uiwsl7wy; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.reservation
+    ADD CONSTRAINT fk6mj44ald890jb8g64uiwsl7wy FOREIGN KEY (ouvrage_ouvrage_id) REFERENCES public.ouvrage(ouvrage_id);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 72962)
+-- Name: emprunt fk71e63onduo96cqjod93f0i18f; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.emprunt
+    ADD CONSTRAINT fk71e63onduo96cqjod93f0i18f FOREIGN KEY (ouvrage_ouvrage_id) REFERENCES public.ouvrage(ouvrage_id);
+
+
+--
+-- TOC entry 2732 (class 2606 OID 72992)
+-- Name: utilisateur_roles fk9m5gu2f9w10ii2fkagju1jko8; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.utilisateur_roles
+    ADD CONSTRAINT fk9m5gu2f9w10ii2fkagju1jko8 FOREIGN KEY (user_id) REFERENCES public.utilisateur(id);
+
+
+--
+-- TOC entry 2728 (class 2606 OID 72972)
+-- Name: ouvrage fkka26n7yqcdlnyd8idh8yaonbe; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.ouvrage
+    ADD CONSTRAINT fkka26n7yqcdlnyd8idh8yaonbe FOREIGN KEY (bibliotheque_bibliotheque_id) REFERENCES public.bibliotheque(bibliotheque_id);
+
+
+--
+-- TOC entry 2730 (class 2606 OID 72982)
+-- Name: reservation fksk7ehgydowtn8krnb0j44gbbk; Type: FK CONSTRAINT; Schema: public; Owner: usr_elit
+--
+
+ALTER TABLE ONLY public.reservation
+    ADD CONSTRAINT fksk7ehgydowtn8krnb0j44gbbk FOREIGN KEY (user_id) REFERENCES public.utilisateur(id);
+
+
+-- Completed on 2020-08-12 16:47:53
+
+--
+-- PostgreSQL database dump complete
+--
+

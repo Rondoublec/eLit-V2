@@ -35,6 +35,8 @@ public class EmpruntController {
 
     @Value("${emprunt.duree.initiale}")
     private int empruntDureeInitiale;
+    @Value("${emprunt.duree.prolongation}")
+    private int empruntDureeProlongation;
 
     @Autowired
     EmpruntRepository empruntRepository;
@@ -110,7 +112,7 @@ public class EmpruntController {
         if (dateNow.after(emprunt.getEmpruntDateFin())){
             throw new NotAcceptableException("Prolongation impossible, délai de restitution dépassé");
         }
-        emprunt.setEmpruntDateProlongation(dateFinPeriode(emprunt.getEmpruntDateFin(), empruntDureeInitiale));
+        emprunt.setEmpruntDateProlongation(dateFinPeriode(emprunt.getEmpruntDateFin(), empruntDureeProlongation));
         emprunt.setEmpruntProlongation(true);
         empruntRepository.save(emprunt);
         return emprunt;
