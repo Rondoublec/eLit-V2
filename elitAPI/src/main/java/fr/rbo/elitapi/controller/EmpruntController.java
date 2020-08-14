@@ -102,9 +102,8 @@ public class EmpruntController {
             throw new NotAcceptableException("Prolongation impossible, ouvrage déjà rendu");
         }
         Date dateNow = Calendar.getInstance().getTime();
-        Date dateProlongation = dateFinPeriode(emprunt.getEmpruntDateFin(),empruntDureeInitiale);
-        if (dateNow.after(dateProlongation)) {
-            emprunt.setEmpruntRelance(true);
+        if (dateNow.after(emprunt.getEmpruntDateFin())){
+            throw new NotAcceptableException("Prolongation impossible, délai de restitution dépassé");
         }
         emprunt.setEmpruntDateProlongation(dateFinPeriode(emprunt.getEmpruntDateFin(), empruntDureeInitiale));
         emprunt.setEmpruntProlongation(true);

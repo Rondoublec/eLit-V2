@@ -45,7 +45,7 @@
         </div>
         <div th:if="${plus eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong> - Prolongation impossible, une prolongation a d&eacute;j&agrave; &eacute;t&eacute; effectu&eacute;e ou cet emprunt est clos.
+                <strong>Erreur !</strong> - Prolongation impossible, rapprochez-vous de votre biblioth&egrave;que.
             </div>
         </div>
         <div th:if="${plus eq 'success'}">
@@ -125,12 +125,19 @@
                                 <div th:text="${#dates.format(emprunt.empruntDateProlongation, 'dd-MM-yyyy')}"></div>
                             </span>
                             <span th:if="${emprunt.empruntProlongation} == false">
-                                <span th:if="${emprunt.empruntRendu} == false">
-                                <div class="btn btn-outline-primary">
-                                    <a th:href="@{|/emprunt/plus?empruntId=${emprunt.empruntId}|}" title="Prolonger" data-toggle="tooltip" data-placement="top"
-                                       onClick="return confirm('Vous allez prolonger cet emprunt, voulez-vous poursuivre ?');">
-                                        Prolonger ? </a>
-                                </div>
+                                <span th:if="${datedujour} > ${emprunt.empruntDateFin}">
+                                    <a href="#" title="Rapprochez-vous de votre bibliothèque" data-toggle="tooltip" data-placement="top">
+                                    Non prolongeable.
+                                    </a>
+                                </span>
+                                <span th:if="${datedujour} <= ${emprunt.empruntDateFin}">
+                                    <span th:if="${emprunt.empruntRendu} == false">
+                                    <div class="btn btn-outline-primary">
+                                        <a th:href="@{|/emprunt/plus?empruntId=${emprunt.empruntId}|}" title="Prolonger" data-toggle="tooltip" data-placement="top"
+                                           onClick="return confirm('Vous allez prolonger cet emprunt, voulez-vous poursuivre ?');">
+                                            Prolonger ? </a>
+                                    </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
