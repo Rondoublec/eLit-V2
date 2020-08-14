@@ -18,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -45,6 +47,7 @@ public class EmpruntController {
         try {
             emprunts = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
         } catch(NotFoundException e){}
+        model.addAttribute("datedujour",Calendar.getInstance().getTime());
         model.addAttribute("empruntCriteres", empruntCriteres);
         model.addAttribute("emprunts", emprunts);
         return "recherche-emprunts-list";
@@ -66,6 +69,7 @@ public class EmpruntController {
         try {
             emprunts = apiProxy.rechercheEmpruntCriteres(empruntCriteres);
         } catch(NotFoundException e){}
+        model.addAttribute("datedujour",Calendar.getInstance().getTime());
         model.addAttribute("empruntCriteres", empruntCriteres);
         model.addAttribute("emprunts", emprunts);
         return "recherche-emprunts-list";
