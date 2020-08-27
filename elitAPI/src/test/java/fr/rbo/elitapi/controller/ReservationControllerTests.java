@@ -1,21 +1,24 @@
 package fr.rbo.elitapi.controller;
 
-import fr.rbo.elitapi.entity.Emprunt;
 import fr.rbo.elitapi.entity.Ouvrage;
 import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
+import fr.rbo.elitapi.exceptions.ConflictException;
+import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
 public class ReservationControllerTests {
+
+    private static String RG001 = "RG001 : Réservation impossible, quotat de réservation en attente atteint ou rupture définitive ! ";
+    private static String RG002 = "RG002 : Réservation impossible, l'usager a un emprunt en cours sur cet ouvrage ! ";
+    private static String RG003 = "RG003 : Réservation impossible, l'usager a une réservation active pour cet ouvrage ! ";
 
     @Autowired
     private ReservationController reservationController;
@@ -177,4 +180,71 @@ public class ReservationControllerTests {
     }
 
     //TODO RG métier à tester
+
+    @Test
+    void controlesMetierRG001_quotat_depasse(){
+        String erreur = new String();
+        // Arrange
+        User user = new User();
+        user.setEmail("alain@a.a");
+        Ouvrage ouvrage = new Ouvrage();
+        ouvrage.setOuvrageId(Long.valueOf("1000"));
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setOuvrage(ouvrage);
+        // Act
+        reservationController.creerReservation(reservation);
+        user.setEmail("maurice@a.a");
+        reservation.setUser(user);
+        try {
+            reservationController.creerReservation(reservation);
+        } catch (NotAcceptableException e) {
+            erreur = e.getMessage();
+        }
+        // Assert
+        Assertions.assertTrue(erreur.equals(RG001));
+    }
+
+    @Test
+    void controlesMetierRG002_emprunt_deja_enCours(){
+        String erreur = new String();
+        // Arrange
+        User user = new User();
+        user.setEmail("a@a.a");
+        Ouvrage ouvrage = new Ouvrage();
+        ouvrage.setOuvrageId(Long.valueOf("4000"));
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setOuvrage(ouvrage);
+        // Act
+        try {
+            reservationController.creerReservation(reservation);
+        } catch (ConflictException e) {
+            erreur = e.getMessage();
+        }
+        // Assert
+        Assertions.assertTrue(erreur.equals(RG002));
+    }
+
+    @Test
+    void controlesMetierRG003_reservation_deja_presente(){
+        String erreur = new String();
+        // Arrange
+        User user = new User();
+        user.setEmail("u3@a.a");
+        Ouvrage ouvrage = new Ouvrage();
+        ouvrage.setOuvrageId(Long.valueOf("3000"));
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setOuvrage(ouvrage);
+        // Act
+        try {
+            reservationController.creerReservation(reservation);
+        } catch (ConflictException e) {
+            erreur = e.getMessage();
+        }
+        // Assert
+        Assertions.assertTrue(erreur.equals(RG003));
+    }
+
 }

@@ -12,10 +12,10 @@ addons:
 #      secure: "1ad579afa992a0a2494f932549fb215381922f6c"
 
 before_script:
-  - psql -c "CREATE USER usr_elit WITH PASSWORD 'elit';" -U postgres
-  - psql -c "CREATE DATABASE bdd_elitv2;" -U postgres
-  - psql -c "GRANT ALL PRIVILEGES ON DATABASE bdd_elitv2 to usr_elit;" -U postgres
-  - psql -U usr_elit -d bdd_elitv2 -a -f init_bdd_elit_v2_test.sql
+#  - psql -c "CREATE USER usr_elit WITH PASSWORD 'elit';" -U postgres
+#  - psql -c "CREATE DATABASE bdd_elitv2;" -U postgres
+#  - psql -c "GRANT ALL PRIVILEGES ON DATABASE bdd_elitv2 to usr_elit;" -U postgres
+#  - psql -U usr_elit -d bdd_elitv2 -a -f init_bdd_elit_v2_test.sql
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
