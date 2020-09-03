@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Bibliotheque {
-    private static final Logger log = LoggerFactory.getLogger(Bibliotheque.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Bibliotheque.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

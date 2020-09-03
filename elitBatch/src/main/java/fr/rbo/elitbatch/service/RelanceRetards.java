@@ -30,15 +30,15 @@ public class RelanceRetards {
     /**
      * Itère sur la liste des adhérents des bibiliothèques
      * Et pour chaque adhérent va rechercher les ouvrages en retard, emprunt en cours dont la date de restitution (prolongation comprise) est dépassée
-     * Et pour envoi un email au adhérents concernés
+     * Et envoi un email aux adhérents concernés
      */
     public void mailsDeRelances() {
         LOGGER.info("Début du traitement : mailsDeRelances");
         Date date = new Date();
-        System.out.println("Passage du batch d'envoi des mails de relances - " + date.toString());
+        LOGGER.info("Passage du batch d'envoi des mails de relances - " + date.toString());
         List<UserBean> listeUser = clientService.listeUser();
         for (UserBean user : listeUser)  {
-        System.out.println( "user : " + user.getId());
+        LOGGER.info( "user : " + user.getId());
             List<EmpruntBean> emprunts = null;
             try {
                 emprunts = apiProxy.listeDesEmpruntsEnRetard(user.getId());

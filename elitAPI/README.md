@@ -2,8 +2,9 @@
 API de gestion de bibliothèques.
 
 ### Contexte  
-Cette API compose la V1 du système d'information des bibliothèques municipales d'une ville.  
-Il s'agit du 7eme projet du cursus Développeur d'application Java proposé par OpenClassrooms.
+Cette API compose la **V2** du système d'information des bibliothèques municipales d'une ville.  
+Il s'agit du 10eme projet du cursus Développeur d'application Java proposé par OpenClassrooms.
+L'objet de cette V2 est l'ajout de la gestion des réservations accessibles directement aux usagers pour les ouvrages indisponibles.
 Développé par Rémy Bourdoncle.  
 
 ### Contenu
@@ -40,6 +41,6 @@ Pour conserver le contenu aux lancements suivants positionnez à **update** la v
 
 **Logs :** Par défaut le niveau de log est positionné à "INFO", les logs sont quotidiens (horodatés) et se trouvent dans le répertoire **logs**, tous ces paramétrages sont dans le fichier **src\main\resources\logback.xml**
 
-Sources disponibles sur : https://github.com/Rondoublec/eLit-V1  
-La partie API est sous :  https://github.com/Rondoublec/eLit-V1/tree/master/elitAPI
+Sources disponibles sur : https://github.com/Rondoublec/eLit-V2  
+La partie API est sous :  https://github.com/Rondoublec/eLit-V2/tree/master/elitAPI
 

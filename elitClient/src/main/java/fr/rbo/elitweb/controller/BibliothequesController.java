@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,6 +18,8 @@ import java.util.List;
 @Controller
 public class BibliothequesController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BibliothequesController.class);
+
+    private static final String REDIRECT_OUVRAGES = "redirect:/ouvrages";
 
     @Autowired
     APIProxy apiProxy;
@@ -32,8 +33,8 @@ public class BibliothequesController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return liste des bibliothèques
      */
-    @RequestMapping(value="/bibliotheques", method = RequestMethod.GET)
-    public String Ouvrages(Model model, HttpSession httpSession
+    @GetMapping(path = "/bibliotheques")
+    public String ouvrages(Model model, HttpSession httpSession
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /bibliotheques");
         List<BibliothequeBean> bibliotheques = apiProxy.findAllBibliotheques();
@@ -48,12 +49,12 @@ public class BibliothequesController {
      * @param redirectAttributes attributs valorisés de la redirection
      * @return redirection vers ouvrages
      */
-    @RequestMapping(value = "/mabibliotheque", method = RequestMethod.GET)
+    @GetMapping(path = "/mabibliotheque")
     public String details(@RequestParam("bibliothequeId") int bibliothequeId, Model model
             , final RedirectAttributes redirectAttributes){
         LOGGER.debug("Get /mabibliotheque : " + bibliothequeId);
         request.getSession().setAttribute("bibliotheque", bibliothequeId);
-        return "redirect:/ouvrages";
+        return REDIRECT_OUVRAGES;
     }
 
 }

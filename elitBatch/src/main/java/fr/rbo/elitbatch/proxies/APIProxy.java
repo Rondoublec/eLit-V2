@@ -5,6 +5,7 @@ import feign.RequestLine;
 import fr.rbo.elitbatch.beans.BibliothequeBean;
 import fr.rbo.elitbatch.beans.EmpruntBean;
 import fr.rbo.elitbatch.beans.OuvrageBean;
+import fr.rbo.elitbatch.beans.ReservationBean;
 import fr.rbo.elitbatch.beans.UserBean;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +47,17 @@ public interface APIProxy {
 
     @RequestLine("GET /emprunts/enretard/{id}")
     List<EmpruntBean> listeDesEmpruntsEnRetard(@Param("id") long id);
+
+    @RequestLine("GET /reservations/notifiees")
+    List<ReservationBean> listeDesReservationsaNotifiees();
+    @RequestLine("GET /reservations/anotifier")
+    List<ReservationBean> listeDesReservationsaNotifier();
+    @RequestLine("PUT /reservation/anotifier/{id}")
+    ReservationBean majReservationaNotifierById(@Param("id") long id);
+    @RequestLine("PUT /reservation/notification/{id}")
+    ReservationBean majDateNotificationById(@Param("id") long id);
+    @RequestLine("PUT /reservation/inverseEtat/{id}")
+    ReservationBean switchEtatReservationById(@Param("id") long id);
 
     @RequestLine("GET /users")
     List<UserBean> listeDesUsers();

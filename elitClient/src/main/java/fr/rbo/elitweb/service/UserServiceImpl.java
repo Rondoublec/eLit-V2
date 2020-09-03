@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         LOGGER.debug("saveUser email : " + user.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(true);
-        HashSet<RoleBean> roles = new HashSet<RoleBean>();
+        HashSet<RoleBean> roles = new HashSet<>();
         roles.add(clientService.recupererUnRoleParRole("USER"));
         user.setRoles(roles);
         clientService.creerUser(user);
@@ -57,13 +57,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private List<GrantedAuthority> getUserAuthority(Set<RoleBean> userRoles) {
         LOGGER.debug("getUserAuthority");
-        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
+        Set<GrantedAuthority> roles = new HashSet<>();
         for (RoleBean role : userRoles) {
             roles.add(new SimpleGrantedAuthority(role.getRole()));
         }
-
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>(roles);
-        return grantedAuthorities;
+        return new ArrayList<>(roles);
     }
 
     private UserDetails buildUserForAuthentication(UserBean user, List<GrantedAuthority> authorities) {

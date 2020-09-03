@@ -4,7 +4,9 @@ import feign.Param;
 import feign.RequestLine;
 import fr.rbo.elitweb.beans.BibliothequeBean;
 import fr.rbo.elitweb.beans.EmpruntBean;
+import fr.rbo.elitweb.beans.EnCoursBean;
 import fr.rbo.elitweb.beans.OuvrageBean;
+import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitweb.beans.RoleBean;
 import fr.rbo.elitweb.beans.UserBean;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,19 +22,15 @@ public interface APIProxy {
 
     @RequestLine("GET /ouvrages")
     List<OuvrageBean> findAll();
-
     @RequestLine("GET /ouvrage/{id}")
     OuvrageBean findOuvrageById(@Param("id") int id);
-
     @RequestLine("POST /ouvrages/recherche")
     List<OuvrageBean> rechercheOuvrage(@RequestBody OuvrageBean ouvrage);
 
     @RequestLine("GET /emprunts")
     List<EmpruntBean> findAllEmprunts();
-
     @RequestLine("GET /emprunt/{id}")
     EmpruntBean findEmpruntById(@Param("id") int id);
-
     @RequestLine("POST /emprunts/recherche/criteres")
     List<EmpruntBean> rechercheEmpruntCriteres(@RequestBody EmpruntBean emprunt);
     @RequestLine("POST /emprunts/recherche/rendu")
@@ -41,19 +39,34 @@ public interface APIProxy {
     List<EmpruntBean> rechercheEmpruntProlonge(@RequestBody EmpruntBean emprunt);
     @RequestLine("POST /emprunts/recherche/relance")
     List<EmpruntBean> rechercheEmpruntRelance(@RequestBody EmpruntBean emprunt);
-
     @RequestLine("PUT /emprunt/plus/{id}")
     EmpruntBean prolongeEmpruntById(@Param("id") int id);
+    @RequestLine("GET /emprunts/encours/{id}")
+    EnCoursBean etatEmpruntEnCours(@Param("id") int id);
+
+    @RequestLine("GET /reservations")
+    List<ReservationBean> listeDesReservations();
+    @RequestLine("GET /reservation/{id}")
+    ReservationBean findReservationById(@Param("id") int id);
+    @RequestLine("POST /reservations/recherche/criteres")
+    List<ReservationBean> rechercheReservationCriteres(@RequestBody ReservationBean reservation);
+    @RequestLine("GET /reservations/ouvrage/{id}")
+    List<ReservationBean> listeDesReservationsDeLOuvrage(@Param("id") int id);
+    @RequestLine("GET /reservations/user/{id}")
+    List<ReservationBean> listeDesReservationsDeCeUser(@Param("id") int id);
+    @RequestLine("POST /reservation/ajout")
+    ReservationBean creerReservation (@RequestBody ReservationBean reservation);
+    @RequestLine("GET /reservation/notification/{id}")
+    ReservationBean notififierDisponibiliteOuvrageReserve (@Param("id") int id);
+    @RequestLine("PUT /reservation/inverseEtat/{id}")
+    ReservationBean switchEtatReservation (@Param("id") int id);
 
     @RequestLine("GET /user/{id}")
     UserBean recupererUnUser(@Param("id") Long id);
-
     @RequestLine("GET /user/email/{email}")
     UserBean recupererUnUserParEmail(@Param("email") String email);
-
     @RequestLine("POST /user/")
     UserBean creerUnUser(@RequestBody UserBean user);
-
     @RequestLine("GET /roles/role/{role}")
     RoleBean roleParRole(@Param("role") String role);
 

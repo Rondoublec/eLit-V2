@@ -1,4 +1,4 @@
-package fr.rbo.elitbatch.ScheduledTask;
+package fr.rbo.elitbatch.scheduledtask;
 
 import fr.rbo.elitbatch.service.ClientAPIService;
 import fr.rbo.elitbatch.service.RelanceRetards;
@@ -37,11 +37,11 @@ public class PlanificationBatchRelanceRetards {
      */
     // parametre dans le application.properties / toutes les 2 minutes pour les besoins du test
     @Scheduled(cron = "${batch.cron.value}")
-    public void PlanificationBatchRelanceRetardsCron() {
+    public void planificationBatchRelanceRetardsCron() {
         LOGGER.info("Lancement du batch");
-        System.out.println( "DEBUT : Appel du traitement des relances ========================== ");
+        LOGGER.info( "DEBUT : Appel du traitement des relances ========================== ");
         relanceRetards.mailsDeRelances();
-        System.out.println( " FIN  : Appel du traitement des relances ========================== ");
+        LOGGER.info( " FIN  : Appel du traitement des relances ========================== ");
 
     }
 }

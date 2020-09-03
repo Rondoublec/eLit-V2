@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="../webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+    <script>
+        // Alerte prolongation
+        function confirmer_annulation()
+        {
+            if(confirm('Vous allez annuler cette réservation, voulez-vous poursuivre ?'))
+            { return true; }
+            else
+            { return false; }
+        }
+    </script>
+    <title>eLitSite - Mes réservations</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="row" style="margin-top:50px;margin-bottom:10px;margin-left:5px;margin-right:5px">
+    <div class="col-md-offset-1 col-md-6">
+        <!-- Edit Alert Message -->
+        <div th:if="${status eq 'notAuthorize'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong> - Action non autoris&eacute;e. <Strong>Pirate !</Strong>
+            </div>
+        </div>
+        <div th:if="${status eq 'notFound'}">
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <strong>Echec !</strong> - D&eacute;tails non disponibles ou réservation inexistante.
+            </div>
+        </div>
+        <div th:if="${annul eq 'notFound'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - Annulation impossible, réservation inexistante.
+            </div>
+        </div>
+        <div th:if="${annul eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - Annulation impossible, cet réservation n'est pas active.
+            </div>
+        </div>
+        <div th:if="${annul eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong> - Annulation r&eacute;alis&eacute;e avec succ&egrave;s.
+            </div>
+        </div>
+        <div th:if="${resa eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong> - R&eacute;servation r&eacute;alis&eacute;e avec succ&egrave;s.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess001'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - R&eacute;servation impossible : Liste d'attente trop importante, r&eacute;essayez dans quelques jours ou contactez votre biblioth&egrave;que.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess002'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - R&eacute;servation impossible : Vous avez un emprunt en cours ou une r&eacute;servation active pour cet ouvrage. Si ce n'est pas le cas, contactez votre biblioth&egrave;que.
+            </div>
+        </div>
+        <div th:if="${resa eq 'unsuccess404'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Echec !</strong> - R&eacute;servation impossible : contactez votre biblioth&egrave;que.
+            </div>
+        </div>
+
+    </div>
+
+    <h3 class="panel-title" th:utext="${titre}"></h3>
+    <div class="col-md-12">
+        <form data-toggle="validator" role="form" th:object="${reservationCriteres}" th:action="@{/mesreservations}" method="post">
+            <table class="table table-striped">
+                <thead>
+                <tr class="btn-default">
+                    <th width="10%"><button type="submit" class="btn btn-primary">Filtrer</button></th>
+                    <th>Statut des r&eacute;servations
+                        <select type="select"  class="form-control"  size="1"  th:field="*{reservationActive}">
+                            <option th:value=true th:text="Actives">Actives</option>
+                            <option th:value=false th:text="Closes">Closes</option>
+                            <option th:value=null th:text="Toutes">Toutes</option>
+                        </select>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </form>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liste de mes réservations</h3>
+            </div>
+            <div class="panel-body">
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr class="btn-default">
+                        <th>Titre</th>
+                        <th>Lieu de récupération</th>
+                        <th>Date de demande</th>
+                        <th>Date de notification</th>
+                        <th>...</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(reservations)}" class="alert alert-info">
+                        <td colspan="7" align="center">Auncune r&eacute;servation trouv&eacute;e !!!</td>
+                    </tr>
+                    <tr th:each="reservation : ${reservations}">
+                        <td><a th:href="@{|/reservation/details?reservationId=${reservation.reservationId}|}" title="Afficher" data-toggle="tooltip" data-placement="top">
+                            <img th:alt="${reservation.ouvrage.ouvrageTitre}" th:src="${reservation.ouvrage.ouvrageLienImage}" width="15%"></a>
+                            <span th:text="${reservation.ouvrage.ouvrageTitre}"></span>
+                        </td>
+                        <td th:text="${reservation.ouvrage.bibliotheque.bibliothequeNom}" th:title="${reservation.ouvrage.bibliotheque.infos()}"></td>
+                        <td th:text="${#dates.format(reservation.reservationDateDemande, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${#dates.format(reservation.reservationDateNotif, 'dd-MM-yyyy')}"></td>
+                        <td>
+                            <span th:if="${reservation.reservationActive} == false">
+                                <div>Demande close</div>
+                            </span>
+                            <span th:if="${reservation.reservationActive} == true">
+                                <div class="btn btn-outline-primary">
+                                    <a th:href="@{|/reservation/inverseEtat?reservationId=${reservation.reservationId}|}" title="Annuler" data-toggle="tooltip" data-placement="top"
+                                       onClick="return confirm('Vous allez annuler cette réservation, voulez-vous poursuivre ?');">
+                                        Annuler ? </a>
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

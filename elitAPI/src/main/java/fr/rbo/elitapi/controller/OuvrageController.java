@@ -59,9 +59,8 @@ public class OuvrageController {
     @GetMapping(value = "/ouvrage/{id}")
     public Ouvrage recupererUnOuvrage (@PathVariable("id") Long id){
         LOGGER.debug("Get /ouvrage/{id} " + id);
-        Ouvrage ouvrage = ouvrageRepository.findById(id).orElseThrow(() ->
+        return ouvrageRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Cet ouvrage n'existe pas"));
-        return ouvrage;
     }
 
     /**
@@ -87,8 +86,8 @@ public class OuvrageController {
     public Ouvrage mettreAJourOuvrage (@PathVariable("id") Long id,
                                         @RequestBody Ouvrage ouvrageNew){
         LOGGER.debug("Put /ouvrage/maj/{id} " + id);
-        if (ouvrageNew.getOuvrageId() != null) {
-            if (!ouvrageNew.getOuvrageId().equals(id)) throw new NotAcceptableException("Demande fausse, ouvrageId différent");
+        if ((ouvrageNew.getOuvrageId() != null) && (!ouvrageNew.getOuvrageId().equals(id))) {
+                throw new NotAcceptableException("Demande fausse, ouvrageId différent");
         }
         Ouvrage ouvrage = ouvrageRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Ouvrage inexistant, non trouvé"));

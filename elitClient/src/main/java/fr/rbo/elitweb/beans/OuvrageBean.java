@@ -13,9 +13,6 @@ public class OuvrageBean {
     private String ouvrageLienImage;
     private BibliothequeBean bibliotheque;
 
-    public OuvrageBean() {
-    }
-
     public Long getOuvrageId() {
         return ouvrageId;
     }

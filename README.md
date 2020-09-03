@@ -1,12 +1,12 @@
-## eLit-V1
+## eLit-V2
 
 ### Contexte  
-Il s'agit du 7eme projet du cursus Développeur d'application Java proposé par OpenClassrooms **Développez le nouveau système d’information de la bibliothèque d’une grande ville (Front / API / Batch)** .  
+Il s'agit du 10eme projet du cursus Développeur d'application Java proposé par OpenClassrooms **Améliorez le système d’information de la bibliothèque d’une grande ville (Front / API / Batch)** .  
 Développé par Rémy Bourdoncle. 
 
 
-###Release 1.0
-Cette release 1.0 propose une site web à l'attention des adhérents des bibliothèques municipales d'une ville pour rechercher des ouvrages et gérer leurs emprunts. Elles se compose de 3 modules :
+###Release 2.0
+Cette release 2.0 Ajoute la gestion des réservations d'ouvrages aux fonctionnalités présentes dans la release 1.0 qui propose une site web à l'attention des adhérents des bibliothèques municipales d'une ville pour rechercher des ouvrages et gérer leurs emprunts. Elles se compose de 3 modules :
  
 **eLitAPI** : il s'agit de l'API qui permet de gérer les objets et activités autour des ouvrages et emprunts.
 Elle permet de gérer : 
@@ -15,6 +15,8 @@ Elle permet de gérer :
 - Les emprunts (création, consultation, modification, restitution, prolongation, suppression, sélection des retards)
 -> en complément, les actions de création d'emprunt et restitution d'emprunt mettent à jour la quantité disponible d'un ouvrage 
 - Les bibliothèques (consultation)
+- **NEW V2.0** Les réservations d'ouvrages (création, consultation, gestion)
+
 Toutes ces fonctionnalités, ne sont pas nécessaires pour la Release 1.0 mais le seront pour les prochaines release (client mobile, application de gestion à l'attention du personnel des bibliothèques, évolution futures).
 
 **elitClient** : il s'agit de l'application WEB mise à disposition des adhérents, elle permet à un adhérent : 
@@ -23,11 +25,13 @@ Toutes ces fonctionnalités, ne sont pas nécessaires pour la Release 1.0 mais l
 - de rechercher et consulter les informations sur les ouvrages
 - de consulter ses emprunts
 - de prolonger ses emprunts
+- **NEW V2.0** effectuer une réservation, consulter et gérer ses réservations 
 
 **elitBatch** : il s'agit d'un traitement automatisé de relance des retards de restitution d'ouvrages empruntés, il permet : 
 - Une analyse, automatique ordonnancée à une fréquence déterminée, des retards
 - De récupérer la liste de retards par adhérent
 - D'envoyer un mail à l'adhérent lui rappelant la liste des ouvrages dont la date de restitution est dépassée
+- **NEW V2.0** envoyer un message aux adhérents ayant réservé un ouvrage lorsque celui-ci est disponible et annuler les réservations non honorées
 
 Ces 3 applications sont indépendantes et packagées par Maven.
 Un README.md accompagne chaque module et documente le fonctionnement et le packaging.

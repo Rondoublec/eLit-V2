@@ -10,7 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Role {
-	private static final Logger log = LoggerFactory.getLogger(Role.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Role.class);
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

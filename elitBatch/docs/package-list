@@ -1,7 +1,7 @@
 fr.rbo.elitbatch
-fr.rbo.elitbatch.ScheduledTask
 fr.rbo.elitbatch.beans
 fr.rbo.elitbatch.configuration
 fr.rbo.elitbatch.exceptions
 fr.rbo.elitbatch.proxies
+fr.rbo.elitbatch.scheduledTask
 fr.rbo.elitbatch.service

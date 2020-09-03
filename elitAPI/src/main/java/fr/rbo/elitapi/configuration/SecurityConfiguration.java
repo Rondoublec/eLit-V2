@@ -1,5 +1,7 @@
 package fr.rbo.elitapi.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.context.annotation.Bean;
         import org.springframework.context.annotation.Configuration;
@@ -12,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.security.core.userdetails.UserDetails;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
         import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
     private AuthenticationEntryPoint authEntryPoint;
@@ -45,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         String password = "clt_api";
         String encrytedPassword = this.passwordEncoder().encode(password);
-        System.out.println("Encoded password of clt_api=" + encrytedPassword);
+        LOGGER.info("Encoded password of clt_api=" + encrytedPassword);
 
         InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> //
                 mngConfig = auth.inMemoryAuthentication();

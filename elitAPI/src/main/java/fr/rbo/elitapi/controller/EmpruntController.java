@@ -1,13 +1,16 @@
 package fr.rbo.elitapi.controller;
 
 import fr.rbo.elitapi.entity.Emprunt;
+import fr.rbo.elitapi.entity.EnCours;
 import fr.rbo.elitapi.entity.Ouvrage;
+import fr.rbo.elitapi.entity.Reservation;
 import fr.rbo.elitapi.entity.User;
 import fr.rbo.elitapi.exceptions.NotAcceptableException;
 import fr.rbo.elitapi.exceptions.NotFoundException;
 import fr.rbo.elitapi.repository.EmpruntRepository;
 import fr.rbo.elitapi.repository.EmpruntRepositoryInterface;
 import fr.rbo.elitapi.repository.OuvrageRepository;
+import fr.rbo.elitapi.repository.ReservationRepository;
 import fr.rbo.elitapi.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,10 @@ public class EmpruntController {
     UserRepository userRepository;
     @Autowired
     OuvrageRepository ouvrageRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
+    @Autowired
+    ReservationController reservationController;
 
     /**
      * renvoie la liste des emprunts
@@ -105,7 +112,7 @@ public class EmpruntController {
         if (dateNow.after(emprunt.getEmpruntDateFin())){
             throw new NotAcceptableException("Prolongation impossible, délai de restitution dépassé");
         }
-        emprunt.setEmpruntDateProlongation(dateFinPeriode(emprunt.getEmpruntDateFin(), empruntDureeInitiale));
+        emprunt.setEmpruntDateProlongation(dateFinPeriode(emprunt.getEmpruntDateFin(), empruntDureeProlongation));
         emprunt.setEmpruntProlongation(true);
         empruntRepository.save(emprunt);
         return emprunt;
@@ -126,6 +133,11 @@ public class EmpruntController {
         }
         User user = userRepository.findById(emprunt.getUser().getId()).orElseThrow(() ->
                 new NotFoundException("Utilisateur inconnu"));
+
+        if (Boolean.FALSE.equals(isEmpruntable(ouvrage, user))) {
+            throw new NotAcceptableException("Emprunt impossible, ouvrage réservé non disponible");
+        }
+
         // Vérifs OK, mise à jour de la quantité d'ouvrages restante avant de créer l'emprunt TODO gérer le rollback
         Integer qte = Integer.parseInt(ouvrage.getOuvrageQuantite())-1;
         ouvrage.setOuvrageQuantite(qte.toString());
@@ -138,6 +150,18 @@ public class EmpruntController {
         emprunt.setEmpruntRelance(false);
         emprunt.setEmpruntRendu(false);
         empruntRepository.save(emprunt);
+
+        // Si l'usager avait une réservation sur cet ouvrage, alors supprimer la réservation (reservationsActive à false)
+        List<Reservation> reservations = null;
+        reservations = reservationRepository.findAllByOuvrageAndUserAndReservationActiveTrue(ouvrage, user);
+        if (reservations != null) {
+            for (Reservation reservation : reservations) {
+                reservation.setNotifier(false);
+                reservation.setReservationActive(false);
+                reservationRepository.save(reservation);
+            }
+        }
+
         return emprunt;
     }
     /**
@@ -176,6 +200,9 @@ public class EmpruntController {
         emprunt.setEmpruntDateRetour(Calendar.getInstance().getTime());
         emprunt.setEmpruntRendu(true);
         empruntRepository.save(emprunt);
+
+        reservationController.reservationActiveaNotifier(ouvrage.getOuvrageId());
+
         return emprunt;
     }
 
@@ -219,11 +246,65 @@ public class EmpruntController {
         return emprunts;
     }
 
+    /**
+     * renvoie la liste des emprunts en cours
+     * @param id de l'ouvrage
+     * @return liste des emprunts en cours pour un ouvrage
+     */
+    @GetMapping(value="/emprunts/encours/{id}")
+    public EnCours etatEmpruntEnCours(@PathVariable("id") long id) {
+        LOGGER.debug("Get /emprunt/encours/{id} " + id);
+        Ouvrage ouvrageRecherche = ouvrageRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Ouvrage inexistant"));
+        List<Emprunt> emprunts = empruntRepository.findAllByOuvrageAndEmpruntRenduFalse(ouvrageRecherche);
+        LOGGER.debug("emprunts " + emprunts.size());
+        EnCours enCours = new EnCours(id,0,null);
+        if (!emprunts.isEmpty()){
+            enCours = infoEmpruntsEnCours(emprunts);
+        }
+        return enCours;
+    }
+
+    private Boolean isEmpruntable (Ouvrage o, User u){
+        Boolean isReservationValide = false;
+
+        List<Reservation> reservationsActives = reservationRepository.findAllByOuvrageAndReservationActiveTrue(o);
+        if (!reservationsActives.isEmpty()){
+            // s'il y a des réservations actives, il faut vérifier si l'usager a été notifié ou est à notifier
+            for (Reservation reservationActive : reservationsActives) {
+                if ((reservationActive.getUser().getId() == u.getId())
+                        && ((reservationActive.getNotifier()||(reservationActive.getReservationDateNotif()!= null)))) {
+                    isReservationValide = true;
+                }
+            }
+        } else {
+            isReservationValide = true; // s'il n'y a pas de réservation active, l'ouvrage est empruntable
+        }
+        return isReservationValide;
+    }
+
     private Date dateFinPeriode (Date dateDebut, int duree){
         GregorianCalendar dateFin = new GregorianCalendar();
         dateFin.setTime(dateDebut);
         dateFin.add(GregorianCalendar.DATE,duree);
         return dateFin.getTime();
+    }
+
+    private EnCours infoEmpruntsEnCours (List<Emprunt> emprunts){
+        EnCours enCours = new EnCours(emprunts.get(0).getOuvrage().getOuvrageId()
+                ,emprunts.size(),emprunts.get(0).getEmpruntDateFin());
+        for (Emprunt e : emprunts) {
+            if (e.getEmpruntDateProlongation() == null){
+                if (e.getEmpruntDateFin().before(enCours.getDateRetourPrevue())){
+                    enCours.setDateRetourPrevue(e.getEmpruntDateFin());
+                }
+            } else {
+                if (e.getEmpruntDateProlongation().before(enCours.getDateRetourPrevue())) {
+                    enCours.setDateRetourPrevue(e.getEmpruntDateProlongation());
+                }
+            }
+        }
+        return enCours;
     }
 
 }

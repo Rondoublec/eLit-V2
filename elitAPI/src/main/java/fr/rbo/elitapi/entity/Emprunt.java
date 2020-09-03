@@ -3,7 +3,6 @@ package fr.rbo.elitapi.entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +12,7 @@ import java.util.Date;
 
 @Entity
 public class Emprunt{
-    private static final Logger log = LoggerFactory.getLogger(Emprunt.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Emprunt.class);
 
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)

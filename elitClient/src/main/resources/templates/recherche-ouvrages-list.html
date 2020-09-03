@@ -26,13 +26,13 @@
         </div>
         <div th:if="${status eq 'notFound'}">
             <div class="alert alert-warning alert-dismissible" role="alert">
-                <strong>Echec !</strong> - D&eacute;tails non disponibles ou identifiant d'ouvragee inexistant.
+                <strong>Echec !</strong> - D&eacute;tails non disponibles ou identifiant d'ouvrage inexistant.
             </div>
         </div>
     </div>
     <h3 class="panel-title" th:utext="${titre}"></h3>
     <div class="col-md-12">
-        <form data-toggle="validator" role="form" th:object="${ouvrageCriteres}" th:action="@{/ouvrages/recherche}"
+        <form data-toggle="validator" role="form" th:object="${ouvrageCriteres}" th:action="@{/ouvrages}"
               method="post">
             <table class="table table-striped">
                 <thead>
@@ -88,7 +88,16 @@
         </a>
         <div th:utext="${ouvrage.ouvrageTitre}"></div>
         <div th:utext="'Auteur ' + ${ouvrage.ouvrageAuteur}"></div>
-        <div th:utext="${ouvrage.ouvrageQuantite} + ' exemplaire(s)'"></div>
+        <div th:if="${ouvrage.ouvrageQuantite eq '0'}">Ouvrage indisponible
+            <div>
+            <a th:href="@{|/ouvrage/details?ouvrageId=${ouvrage.ouvrageId}|}" title="resa">
+                Voir s'il est réservable
+            </a>
+            </div>
+        </div>
+        <div th:if="${ouvrage.ouvrageQuantite ne '0'}">
+            <span th:utext="${ouvrage.ouvrageQuantite} + ' disponible(s)'"></span>
+        </div>
         <div th:utext="'&agrave; ' + ${ouvrage.bibliotheque.bibliothequeNom}"
              th:title="${ouvrage.bibliotheque.infos()}"></div>
     </div>

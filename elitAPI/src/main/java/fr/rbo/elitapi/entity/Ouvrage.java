@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Ouvrage {
-    private static final Logger log = LoggerFactory.getLogger(Ouvrage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Ouvrage.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
