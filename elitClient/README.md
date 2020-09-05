@@ -10,7 +10,7 @@ Développé par Rémy Bourdoncle.
 ### Contenu
 Ce site permet aux adhérents de rechercher des ouvrages, de consulter l'état de leurs emprunts et de prolonger leurs emprunts en cours
 
-La **V2** permet de réserver un ouvrage non disponible ainsi que la gestion de ses réservations, consulter l'état de ses réservations, le positionnement de ses réservation dans la liste d'attente, l'annulation de réservations, ...
+**NEW V2.0** Permet de réserver un ouvrage non disponible ainsi que la gestion de ses réservations, consulter l'état de ses réservations, le positionnement de ses réservation dans la liste d'attente, l'annulation de réservations, ...
 
 ### Prérequis techniques
 Version de Java : 1.8  

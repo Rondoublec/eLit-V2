@@ -8,7 +8,7 @@ L'objet de cette V2 est l'ajout de la gestion des réservations accessibles dire
 Développé par Rémy Bourdoncle.  
 
 ### Contenu
-Cette API gère les comptes utilisateurs, les ouvrages et les emprunts
+Cette API gère les comptes utilisateurs, les ouvrages, les emprunts et **les réservations (NEW V2.0**) 
 
 ### Prérequis techniques 
 Version de Java : 1.8  
