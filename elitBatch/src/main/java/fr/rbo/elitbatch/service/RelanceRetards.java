@@ -1,7 +1,7 @@
 package fr.rbo.elitbatch.service;
 
-import fr.rbo.elitbatch.beans.EmpruntBean;
-import fr.rbo.elitbatch.beans.UserBean;
+import fr.rbo.elitweb.beans.EmpruntBean;
+import fr.rbo.elitweb.beans.UserBean;
 import fr.rbo.elitbatch.exceptions.NotFoundException;
 import fr.rbo.elitbatch.proxies.APIProxy;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package fr.rbo.elitbatch.service;
 
-import fr.rbo.elitbatch.beans.ReservationBean;
+import fr.rbo.elitweb.beans.ReservationBean;
 import fr.rbo.elitbatch.exceptions.NotFoundException;
 import fr.rbo.elitbatch.proxies.APIProxy;
 import org.slf4j.Logger;

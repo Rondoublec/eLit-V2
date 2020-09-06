@@ -1,8 +1,8 @@
 package fr.rbo.elitbatch.service;
 
-import fr.rbo.elitbatch.beans.EmpruntBean;
-import fr.rbo.elitbatch.beans.ReservationBean;
-import fr.rbo.elitbatch.beans.UserBean;
+import fr.rbo.elitweb.beans.EmpruntBean;
+import fr.rbo.elitweb.beans.ReservationBean;
+import fr.rbo.elitweb.beans.UserBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

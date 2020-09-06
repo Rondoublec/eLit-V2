@@ -2,11 +2,11 @@ package fr.rbo.elitbatch.proxies;
 
 import feign.Param;
 import feign.RequestLine;
-import fr.rbo.elitbatch.beans.BibliothequeBean;
-import fr.rbo.elitbatch.beans.EmpruntBean;
-import fr.rbo.elitbatch.beans.OuvrageBean;
-import fr.rbo.elitbatch.beans.ReservationBean;
-import fr.rbo.elitbatch.beans.UserBean;
+import fr.rbo.elitweb.beans.BibliothequeBean;
+import fr.rbo.elitweb.beans.EmpruntBean;
+import fr.rbo.elitweb.beans.OuvrageBean;
+import fr.rbo.elitweb.beans.ReservationBean;
+import fr.rbo.elitweb.beans.UserBean;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 

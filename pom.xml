@@ -31,9 +31,9 @@
     <!-- Modules -->
     <!-- =============================================================== -->
     <modules>
-        <module>elitAPI</module>
-        <module>elitClient</module>
-        <module>elitBatch</module>
+        <module>eLitAPI</module>
+        <module>eLitClient</module>
+        <module>eLitBatch</module>
     </modules>
 
     <!-- =============================================================== -->
@@ -44,17 +44,17 @@
             <!-- ========== Modules ========== -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>elitAPI</artifactId>
+                <artifactId>eLitAPI</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>elitClient</artifactId>
+                <artifactId>eLitClient</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>elitBatch</artifactId>
+                <artifactId>eLitBatch</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
